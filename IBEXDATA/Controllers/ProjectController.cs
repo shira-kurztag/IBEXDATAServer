@@ -56,7 +56,7 @@ namespace Application.Controllers
                 return CreatedAtAction(nameof(GetById), new { id = newProj.ProjectId }, newProj);
             }
 
-            _logger.LogWarning("Failed to add Project: {ProjectName}", Project.ProjectName);
+            _logger.LogWarning("Failed to add the Project: {ProjectName}", Project.ProjectName);
             return BadRequest($"The Project {Project.ProjectName} not successfully added");
         }
 
@@ -114,7 +114,7 @@ namespace Application.Controllers
 
             if (updatedProject != null)
             {
-                _logger.LogInformation("Successfully updated Project with ID: {ProjectId}", id);
+               // _logger.LogInformation("Successfully updated Project with ID: {ProjectId}", id);
                 var updatedProjectDTO = _mapper.Map<Project, ProjectCreateDTO>(updatedProject);
                 return Ok(updatedProjectDTO);
             }
