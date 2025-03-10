@@ -114,7 +114,7 @@ namespace Application.Controllers
 
             if (updatedProject != null)
             {
-               // _logger.LogInformation("Successfully updated Project with ID: {ProjectId}", id);
+                _logger.LogInformation("Successfully updated Project with ID: {ProjectId}", id);
                 var updatedProjectDTO = _mapper.Map<Project, ProjectCreateDTO>(updatedProject);
                 return Ok(updatedProjectDTO);
             }
