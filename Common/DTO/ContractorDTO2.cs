@@ -9,6 +9,7 @@ namespace Common.DTO
     public class ContractorDTO2
     {
         public int? ContractorId { get; set; }
+
         public string? ContractorIdentity { get; set; }
 
         public string? ContractorName { get; set; }
