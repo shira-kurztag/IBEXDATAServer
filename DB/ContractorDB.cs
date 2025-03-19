@@ -27,8 +27,6 @@ namespace DB
 
         public async Task CreateContractor(ContractorDTO2 contractor)
         {
-            _logger.LogInformation("Starting UpdateContractor");
-
             var newContractor = mapper.Map<Contractor>(contractor);
             newContractor.InsertDate = DateOnly.FromDateTime(DateTime.Now); // קביעת תאריך יצירה
             newContractor.ContractorStatus = 1;
