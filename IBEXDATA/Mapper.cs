@@ -18,10 +18,12 @@ namespace Application
 
             // Mapping from Bank to BankDTO
             CreateMap<Bank, BankDTO>();
+            CreateMap<BankDTO, Bank>();
             CreateMap<Bank, BankNamesDTO>();
 
             CreateMap<Contractor, ContractorDTO>();
             CreateMap<Building, BuildingDTO>();
+            CreateMap<Mortagege, MortagegeDTO>().ReverseMap();
 
         }
     }

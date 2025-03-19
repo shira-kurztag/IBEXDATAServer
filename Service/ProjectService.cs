@@ -54,6 +54,9 @@ namespace Service
             return await _ProjectDB.GetAllContractors(); // קרא ל-repository להשגת כל הקבלנים
         }
 
-  
+        public async Task<List<Project>> GetProjecctByContractor(int id)
+        {
+            return await _ProjectDB.GetProjecctByContractor(id);
+        }
     }
 }

@@ -27,5 +27,25 @@ namespace Service
         {
             return await _BankDB.GetNames();
         }
+
+        public IEnumerable<Bank> GetBanks()
+        {
+            //_logger.Log("hiiiiiiiiiii");
+            return _BankDB.GetBanks();
+        }
+        public IEnumerable<Bank> DeleteBankById(int Id)
+        {
+            return _BankDB.DeleteBankById(Id);
+        }
+
+        public async Task<Bank> Update(int id, Bank bank)
+        {
+            return await _BankDB.Update(id, bank);
+        }
+
+        public IEnumerable<Bank> AddBank(Bank newBank)
+        {
+            return _BankDB.AddBank(newBank);
+        }
     }
 }

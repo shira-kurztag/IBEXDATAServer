@@ -100,6 +100,20 @@ namespace Application.Controllers
             return Ok(projDTO);
         }
 
+        [Route("GetProjecctByContractor")]
+        [HttpGet]
+        public async Task<IActionResult> GetProjecctByContractor([FromQuery] int id)
+        {
+            var proj = await _ProjectService.GetProjecctByContractor(id);
+            if (proj == null)
+            {
+                return NotFound();
+            }
+
+            var projDTO = _mapper.Map<List<Project>, List<ProjectCreateDTO>>(proj);
+            return Ok(projDTO);
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id,[FromBody] ProjectCreateDTO project)
@@ -123,37 +137,37 @@ namespace Application.Controllers
             return NotFound($"Project with ID {id} not found");
         }
 
-        //[Route("GetById")]
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetById(int id)
-        //{
-        //    var proj = await _ProjectService.GetById(id);
-        //    if (proj == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var projDTO = _mapper.Map<Project, ProjectDTO>(proj);
-        //    return Ok(projDTO);
-        //}
-
-        //[Route("GetCompanyById")]
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetCompanyById(int id)
-        //{
-        //    var cont = await _ProjectService.GetCompanyById(id);
-        //    if (cont == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var contDTO = _mapper.Map<Contractor, ContractorDTO>(cont);
-        //    return Ok(contDTO);
-        //}
-        //נשלוף את שם החברה של הקבלן לפי הID המתקבל
-
+     
     }
 }
+//[Route("GetById")]
+//[HttpGet("{id}")]
+//public async Task<IActionResult> GetById(int id)
+//{
+//    var proj = await _ProjectService.GetById(id);
+//    if (proj == null)
+//    {
+//        return NotFound();
+//    }
+
+//    var projDTO = _mapper.Map<Project, ProjectDTO>(proj);
+//    return Ok(projDTO);
+//}
+
+//[Route("GetCompanyById")]
+//[HttpGet("{id}")]
+//public async Task<IActionResult> GetCompanyById(int id)
+//{
+//    var cont = await _ProjectService.GetCompanyById(id);
+//    if (cont == null)
+//    {
+//        return NotFound();
+//    }
+
+//    var contDTO = _mapper.Map<Contractor, ContractorDTO>(cont);
+//    return Ok(contDTO);
+//}
+//נשלוף את שם החברה של הקבלן לפי הID המתקבל
 
 //using IBEXDATA.Models;
 //using Microsoft.AspNetCore.Http;

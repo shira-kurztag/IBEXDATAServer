@@ -61,6 +61,12 @@ namespace DB
             return await _context.Projects.FirstOrDefaultAsync(p => p.ProjectName == projectName);
         }
 
+        public async Task<List<Project>> GetProjecctByContractor(int id)
+        {
+            return await _context.Projects.Where(p => p.ContractingCompanyId == id).ToListAsync();
+        }
+
+
         public async Task<bool> Delete(int id)
         {
             var project = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);

@@ -6,6 +6,7 @@ using Common;
 using Service;
 using Serilog;
 using Microsoft.OpenApi.Models;
+using Application.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ Log.Logger = new LoggerConfiguration()
 
 // Add services to the container.                                                                                                                                                                                                                         
 
+builder.Services.AddScoped<IFareService, FareService>();
+builder.Services.AddScoped<IFareDB, FareDB>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectDB, ProjectDB>();
 builder.Services.AddScoped<IBankService, BankService>();
@@ -24,8 +27,10 @@ builder.Services.AddScoped<IOwnerService, OwnerService>();
 builder.Services.AddScoped<IOwnerDB, OwnerDB>();
 builder.Services.AddScoped<IBuildingService, BuildingService>();
 builder.Services.AddScoped<IBuildingDB, BuildingDB>();
-
-
+builder.Services.AddScoped<IContractorDB, ContractorDB>();
+builder.Services.AddScoped<IContractorService, ContractorService>();
+builder.Services.AddScoped<IMortagegeDB, MortagegeDB>();
+builder.Services.AddScoped<IMortagegeService, MortagegeService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
