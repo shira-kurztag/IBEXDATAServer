@@ -22,5 +22,17 @@ namespace Service
         {
             return await _OwnerDB.Get();
         }
+        public async Task<IEnumerable<Owner>> GetOwnerByApartment(int apartmentId)
+        {
+            try
+            {
+                var allOwners = await _OwnerDB.Get();
+                return allOwners.Where(owner => owner.ApartmentId == apartmentId);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while retrieving owners by apartment ID.", ex);
+            }
+        }
     }
 }
