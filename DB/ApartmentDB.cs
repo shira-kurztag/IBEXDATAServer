@@ -1,4 +1,7 @@
-﻿using IBEXDATA.Models;
+﻿using AutoMapper;
+using Common.DTO;
+using IBEXDATA.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,12 +14,15 @@ namespace DB
     public class ApartmentDB : IApartmentDB
     {
         private readonly ILogger<ApartmentDB> _logger;
+        private readonly IMapper _mapper;
+
 
         private readonly dbContext _context;
-        public ApartmentDB(dbContext context, ILogger<ApartmentDB> logger)
+        public ApartmentDB(dbContext context, ILogger<ApartmentDB> logger, IMapper mapper)
         {
             _logger = logger;
             _context = context;
+            _mapper = mapper;
         }
 
 
@@ -35,6 +41,27 @@ namespace DB
         public IEnumerable<LinkageCode> GetLinkagCode()
         {
             return _context.LinkageCodes.ToList();
+        }
+       
+        public ApartmentDTO AddApartmentWithLinkages(int buildingId, ApartmentDTO newLinkagesApartment)
+        {
+            // הוספת הדירה החדשה
+
+            //newLinkagesApartment.BuildingId = buildingId;
+            Apartment apartment = _mapper.Map<Apartment>(newLinkagesApartment);
+            _context.Set<Apartment>().Add(apartment);
+            _context.SaveChanges();
+
+            // קבלת המזהה של הדירה החדשה
+            int newApartmentId = apartment.ApartmentId;
+
+            // החזרת הדירה החדשה יחד עם ההצמדות
+            var res = _context.Set<Apartment>()
+                           .Include(a => a.LinkagesApartments)
+                           .Where(a => a.ApartmentId == newApartmentId)
+                           .FirstOrDefault();
+
+            return _mapper.Map<ApartmentDTO>(res);
         }
     }
 }

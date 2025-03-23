@@ -1,4 +1,5 @@
-﻿using DB;
+﻿using Common.DTO;
+using DB;
 using IBEXDATA.Models;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,10 @@ namespace Service
         public IEnumerable<LinkageCode> GetLinkagCode()
         {
             return _ApartmentDB.GetLinkagCode();
+        }
+        public ApartmentDTO AddApartmentWithLinkages(int buildingId, ApartmentDTO newLinkagesApartment)
+        {
+            return _ApartmentDB.AddApartmentWithLinkages(buildingId, newLinkagesApartment);
         }
     }
 }
