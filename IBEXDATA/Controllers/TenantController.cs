@@ -1,4 +1,5 @@
 ﻿using Common.DTO;
+using DB;
 using IBEXDATA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
@@ -44,13 +45,30 @@ namespace Application.Controllers
         }
         //
         // POST api/<TenantController>
-        //[HttpPost]
-        //public void Post([FromBody] TenantDTO Tenant)
-        //{
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] List<TenantDTO> tenants)
+        {
+            if (tenants == null || tenants.Count == 0)
+            {
+                return BadRequest("No tenants provided.");
+            }
 
-        //}
+            try
+            {
+                await _tenantService.AddTenants(tenants);
+                return Ok("Tenants added successfully.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
-        //// PUT api/<TenantController>/5
+        // PUT api/<TenantController>/5
         //[HttpPut("{id}")]
         //public void Put(int id, [FromBody] string value)
         //{
@@ -75,4 +93,8 @@ namespace Application.Controllers
 
       
     }
-    }
+
+}
+
+
+    

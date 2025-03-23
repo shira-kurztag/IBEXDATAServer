@@ -1,4 +1,5 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
+using IBEXDATA.Models;
 
 namespace DB
 {
@@ -6,5 +7,8 @@ namespace DB
     {
         Task<List<Tenant>> GetAllTenants();
         Task<List<OwnerTenant>> GetPartAssetByOwnerTenants();
+        Task  AddTenants (Tenant tenants);
+        Task AddPower(PowerOfAttorney Power);
+        Task<Apartment> GetTenantsApartment(int ApartmentID);
     }
 }
