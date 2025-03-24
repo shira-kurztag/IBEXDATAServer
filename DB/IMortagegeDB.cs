@@ -7,5 +7,6 @@ namespace DB
         Task<List<CurrencyType>> GetAllCurrencyTypes();
         Task<List<MortagegeLevel>> GetAllMortagegeLevels();
         Task<List<MortagegesType>> GetAllMortagegesTypes();
+        Task CreateMortagege(Mortagege mortagege, MortgageToTeanant mortgageToTeanant);
     }
 }

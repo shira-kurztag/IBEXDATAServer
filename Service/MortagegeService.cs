@@ -1,4 +1,6 @@
-﻿using DB;
+﻿using AutoMapper;
+using Common.DTO;
+using DB;
 using IBEXDATA.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,11 +15,13 @@ namespace Service
     {
         private readonly IMortagegeDB _mortagegeDB;
 
+        private readonly IMapper _mapper;
 
 
-        public MortagegeService(IMortagegeDB MortagegeDB)
+        public MortagegeService(IMortagegeDB MortagegeDB, IMapper mapper)
         {
             _mortagegeDB = MortagegeDB;
+            _mapper = mapper;
 
         }
         public async Task<List<MortagegesType>> GetAllMortagegesTypes()
@@ -33,6 +37,17 @@ namespace Service
         {
             return await _mortagegeDB.GetAllMortagegeLevels();
 
+        }
+
+        public async Task CreateMortagege(MortagegeDTO mortagegeDTO)
+        {
+            var mortagege = _mapper.Map<Mortagege>(mortagegeDTO);
+            var mortgageToTeanant = new MortgageToTeanant
+            {
+                TeanantId = mortagegeDTO.TeanantId  
+            };
+
+            await _mortagegeDB.CreateMortagege(mortagege, mortgageToTeanant);
         }
 
     }

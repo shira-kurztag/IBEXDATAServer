@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public interface IOwnerService
+    public interface IOwnerTenantService
     {
-        Task<IEnumerable<Owner>> Get();
-
-        Task<List<Tenant>> GetOwnerByApartment(int apartmentId);
-
+        Task<List<Tenant>> GetAllownerTenantByOwners(List<Owner> owners);
 
     }
 }

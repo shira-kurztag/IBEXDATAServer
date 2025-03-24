@@ -1,4 +1,5 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
+using IBEXDATA.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service;
@@ -51,6 +52,25 @@ namespace Application.Controllers
 
         }
 
-     
+        [HttpPost]
+        public async Task<IActionResult> CreateMortagege([FromBody] MortagegeDTO mortagegeDTO)
+        {
+            try
+            {
+                if (mortagegeDTO == null)
+                {
+                    return BadRequest("Invalid object.");
+                }
+
+                await _mortagegeService.CreateMortagege(mortagegeDTO);
+                return Ok("Mortagege created successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (logging implementation is skipped here)
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the mortagege.");
+            }
+        }
+
     }
 }

@@ -37,5 +37,30 @@ namespace Application.Controllers
             _logger.LogWarning("Failed to retrieve owners.");
             return BadRequest();
         }
+
+        [HttpGet("GetOwnersByApartmentId/{apartmentId}")]
+        public async Task<IActionResult> GetOwnersByApartmentId(int apartmentId)
+        {
+            try
+            {
+                var owners = await _OwnerService.GetOwnerByApartment(apartmentId);
+                if (owners == null || !owners.Any())
+                {
+                    return NotFound();
+                }
+
+                return Ok(owners);
+            }
+            catch (ApplicationException ex)
+            {
+                // Log the exception (e.g., using a logging framework)
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (e.g., using a logging framework)
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
+            }
+        }
     }
 }

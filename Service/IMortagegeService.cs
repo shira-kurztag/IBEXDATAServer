@@ -1,4 +1,5 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
+using IBEXDATA.Models;
 
 namespace Service
 {
@@ -7,5 +8,6 @@ namespace Service
         Task<List<CurrencyType>> GetAllCurrencyTypes();
         Task<List<MortagegeLevel>> GetAllMortagegeLevels();
         Task<List<MortagegesType>> GetAllMortagegesTypes();
+        Task CreateMortagege(MortagegeDTO mortagegeDTO);
     }
 }

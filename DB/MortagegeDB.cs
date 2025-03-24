@@ -49,5 +49,13 @@ namespace DB
             return await _dbContext.MortagegeLevels.ToListAsync();
 
         }
+        public async Task CreateMortagege(Mortagege mortagege, MortgageToTeanant mortgageToTeanant)
+        {
+            await _dbContext.Mortageges.AddAsync(mortagege);
+            await _dbContext.SaveChangesAsync();
+            mortgageToTeanant.MortgageId = mortagege.MortagegeId;
+            await _dbContext.Set<MortgageToTeanant>().AddAsync(mortgageToTeanant);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

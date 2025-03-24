@@ -47,6 +47,12 @@ namespace Service
 
             return curOwnerTenants.PartAsset.Value;
         }
-
+        public async Task<List<Tenant>> GetTenantsByIds(List<int> tenantIds)
+        {
+            var teants= await _tenantDB.GetAllTenants(); 
+            return  teants
+                .Where(t => tenantIds.Contains(t.TenantId))
+                .ToList();
+        }
     }
 }

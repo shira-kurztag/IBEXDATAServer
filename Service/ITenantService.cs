@@ -7,5 +7,6 @@ namespace Service
         Task<List<Tenant>> GetAllTenants();
         Task<double> GetPartAssetByOwnerTenants(int Id);
         Task<Tenant> GetTenantById(int Id);
+        Task<List<Tenant>> GetTenantsByIds(List<int> tenantIds);
     }
 }
