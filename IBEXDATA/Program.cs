@@ -31,8 +31,14 @@ builder.Services.AddScoped<IContractorDB, ContractorDB>();
 builder.Services.AddScoped<IContractorService, ContractorService>();
 builder.Services.AddScoped<IMortagegeDB, MortagegeDB>();
 builder.Services.AddScoped<IMortagegeService, MortagegeService>();
+
 builder.Services.AddScoped<IOwnerTenantDB, OwnerTenantDB>();
 builder.Services.AddScoped<IOwnerTenantService, OwnerTenantService>();
+
+builder.Services.AddScoped<ITenantService, TenantService>();
+builder.Services.AddScoped<ITenantDB, TenantDB>();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
