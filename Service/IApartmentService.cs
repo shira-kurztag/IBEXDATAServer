@@ -14,7 +14,7 @@ namespace Service
         IEnumerable<Apartment> GetApartmentsByBuildingId(int buildingId);
         IEnumerable<Warehouse> GetWarehouseByBuilding(int buildingId);
         IEnumerable<Parking> GetParkingByBuilding(int buildingId);
-        IEnumerable<LinkageCode> GetLinkagCode();//
+        IEnumerable<LinkageCode> GetLinkagCode();
         ApartmentDTO AddApartmentWithLinkages(int buildingId, ApartmentDTO newLinkagesApartment);
     }
 }
