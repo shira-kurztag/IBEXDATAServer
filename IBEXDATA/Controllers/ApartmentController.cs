@@ -40,5 +40,24 @@ namespace Application.Controllers
         {
             return _ApartmentService.GetLinkagCode();
         }
+
+        [Route("GetPartAssetApartmenID/{ApartmentID}")]
+        [HttpGet]
+        public async Task<IActionResult> GetPartAssetApartmentID(int ApartmentID)
+        {
+            try
+            {
+                double partAsset = await _ApartmentService.GetPartAssetApartmenID(ApartmentID);
+                return Ok(partAsset);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
     }
 }

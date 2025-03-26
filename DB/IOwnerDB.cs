@@ -1,4 +1,5 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
+using IBEXDATA.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace DB
     public interface IOwnerDB
     {
         Task<IEnumerable<Owner>> Get();
+        Task<int> AddOwner(Owner owner);
+        Task<Owner> getOwnerByApartmen(int apartmenID);
     }
 }

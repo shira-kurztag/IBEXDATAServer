@@ -13,13 +13,16 @@ namespace Application.Controllers
     public class TenantController : ControllerBase
     {
         private readonly ITenantService _tenantService;
+        private readonly IApartmentService _ApartmentService;
 
-        public TenantController(ITenantService tenantService)
+
+        public TenantController(ITenantService tenantService,IApartmentService ApartmentService)
         {
             _tenantService = tenantService;
+            _ApartmentService = ApartmentService;
         }
 
-       [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> GetAllTenants()
         {
             try
@@ -48,6 +51,7 @@ namespace Application.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] List<TenantDTO> tenants)
         {
+           
             if (tenants == null || tenants.Count == 0)
             {
                 return BadRequest("No tenants provided.");
@@ -56,7 +60,7 @@ namespace Application.Controllers
             try
             {
                 await _tenantService.AddTenants(tenants);
-                return Ok("Tenants added successfully.");
+                return Ok(new { message = "Tenants added successfully." });
             }
             catch (InvalidOperationException ex)
             {
@@ -91,7 +95,9 @@ namespace Application.Controllers
 
         }
 
-      
+
+
+
     }
 
 }

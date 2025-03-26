@@ -7,8 +7,8 @@ namespace DB
     {
         Task<List<Tenant>> GetAllTenants();
         Task<List<OwnerTenant>> GetPartAssetByOwnerTenants();
-        Task  AddTenants (Tenant tenants);
-        Task AddPower(PowerOfAttorney Power);
+        Task <int> AddTenants (Tenant tenants);
         Task<Apartment> GetTenantsApartment(int ApartmentID);
+       
     }
 }

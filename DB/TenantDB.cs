@@ -28,18 +28,16 @@ namespace DB
 
         }
 
-        public async Task AddPower(PowerOfAttorney Power)
-        {
-            await _dbContext.PowerOfAttorneys.AddAsync(Power);
-            await _dbContext.SaveChangesAsync();
-        }
+     
 
-        public async Task AddTenants(Tenant tenants)
+        public async Task<int> AddTenants(Tenant tenants)
         {
-           await _dbContext.Tenants.AddAsync(tenants);
-            Console.WriteLine("hh");
-            await _dbContext.SaveChangesAsync();
-           
+          await _dbContext.Tenants.AddAsync(tenants);
+          
+            //await _dbContext.SaveChangesAsync();
+            return tenants.TenantId;
+
+
         }
 
         public async Task<List<Tenant>> GetAllTenants()
@@ -61,8 +59,11 @@ namespace DB
         {
             return await _dbContext.Apartments
                                    .FirstOrDefaultAsync(a => a.ApartmentId == ApartmentID);
-            
+
         }
+       
+
+
 
     }
 }

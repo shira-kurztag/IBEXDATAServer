@@ -1,4 +1,5 @@
 ﻿using IBEXDATA.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -36,5 +37,28 @@ namespace DB
         {
             return _context.LinkageCodes.ToList();
         }
+        public async Task<List<OwnerTenant>> GetPartAsset(int ApartmentID)
+        {
+            var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.ApartmentId == ApartmentID);
+            if (apartment==null)
+            {
+                throw new InvalidOperationException("Apartment not found for the given ApartmentID.");
+
+            }
+            var owner = await _context.Owners.FirstOrDefaultAsync(a => a.ApartmentId == ApartmentID);
+            int OwnerId = owner?.OwnerId ?? -1;
+            if (OwnerId == -1)
+            {
+                return new List<OwnerTenant>(); // החזר רשימה ריקה אם לא נמצא בעלים
+
+            }
+            List<OwnerTenant> ownerTenants = await _context.OwnerTenants.Where(a => a.OwnerId == OwnerId).ToListAsync();
+
+            return ownerTenants;
+
+
+        }
+
+
     }
 }
