@@ -43,5 +43,45 @@ namespace Application.Controllers
 
             return Ok(buildingNumbersDTOs);
         }
+        [Route("")]
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] BuildingDTO Building)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var build = _mapper.Map<BuildingDTO, Building>(Building);
+
+            var Buildings = await _BuildingService.Add(build);
+
+            if (Buildings != null)
+            {
+                _logger.LogInformation("Successfully added Project: {ProjectName}", Building.BuildingStatus);
+
+                BuildingDTO newB = _mapper.Map<Building, BuildingDTO>(Buildings);
+                return CreatedAtAction(nameof(build), new { id = newB.BuildingId }, newB);
+               
+            }
+
+            _logger.LogWarning("Failed to add the Project: {ProjectName}", Building.BuildingStatus);
+            return BadRequest($"The Project {Building.BuildingStatus} not successfully added");
+        }
+
+
+
+        //[HttpPost]
+        //public ActionResult<IEnumerable<Building>> Add([FromBody] BuildingDTO Building)
+        //{
+        //    if (Building == null)
+        //    {
+        //        return BadRequest("Bank is null.");
+        //    }
+
+        //    var build2 = _BuildingService.Add(Building);
+        //    return Ok(build2);
+        //}
+
     }
 }

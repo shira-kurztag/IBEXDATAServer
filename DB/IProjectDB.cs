@@ -18,6 +18,6 @@ namespace DB
        Task<Project> Update(int id, Project project);
        Task<List<Contractor>> GetAllContractors();
         Task<List<Project>> GetProjecctByContractor(int id);
-
+        Task<List<Building>> GetBuildingAsync();
     }
 }

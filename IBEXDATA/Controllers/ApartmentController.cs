@@ -53,6 +53,7 @@ namespace Application.Controllers
                 return BadRequest("Invalid apartment data.");
             }
 
+
             var addedApartments = _ApartmentService.AddApartmentWithLinkages(buildingId, newLinkagesApartment);
             return Ok(addedApartments);
         }

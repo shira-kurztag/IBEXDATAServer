@@ -42,26 +42,42 @@ namespace DB
         {
             return _context.LinkageCodes.ToList();
         }
-       
+
         public ApartmentDTO AddApartmentWithLinkages(int buildingId, ApartmentDTO newLinkagesApartment)
         {
-            // הוספת הדירה החדשה
+            try
+            {
+                // הדפסת הנתונים שנשלחים
+                Console.WriteLine($"Adding apartment with data: {newLinkagesApartment}");
 
-            //newLinkagesApartment.BuildingId = buildingId;
-            Apartment apartment = _mapper.Map<Apartment>(newLinkagesApartment);
-            _context.Set<Apartment>().Add(apartment);
-            _context.SaveChanges();
+                // הוספת הדירה החדשה
+                Apartment apartment = _mapper.Map<Apartment>(newLinkagesApartment);
+                _context.Set<Apartment>().Add(apartment);
+                _context.SaveChanges();
 
-            // קבלת המזהה של הדירה החדשה
-            int newApartmentId = apartment.ApartmentId;
+                // קבלת המזהה של הדירה החדשה
+                int newApartmentId = apartment.ApartmentId;
 
-            // החזרת הדירה החדשה יחד עם ההצמדות
-            var res = _context.Set<Apartment>()
-                           .Include(a => a.LinkagesApartments)
-                           .Where(a => a.ApartmentId == newApartmentId)
-                           .FirstOrDefault();
+                // החזרת הדירה החדשה יחד עם ההצמדות
+                var res = _context.Set<Apartment>()
+                               .Include(a => a.LinkagesApartments)
+                               .Where(a => a.ApartmentId == newApartmentId)
+                               .FirstOrDefault();
 
-            return _mapper.Map<ApartmentDTO>(res);
+                return _mapper.Map<ApartmentDTO>(res);
+            }
+            catch (DbUpdateException ex)
+            {
+                // הדפסת ההודעה הפנימית של השגיאה
+                Console.WriteLine($"DbUpdateException error: {ex.InnerException?.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // הדפסת שגיאות כלליות
+                Console.WriteLine($"Exception error: {ex.Message}");
+                throw;
+            }
         }
     }
 }

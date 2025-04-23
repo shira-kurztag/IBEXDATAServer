@@ -18,5 +18,9 @@ namespace Service
         {
             return await _buildingDB.GetBuildingNumbersByProjectId(projectId);
         }
+        public async Task<Building> Add(Building Building)
+        {
+            return await _buildingDB.Add(Building);
+        }
     }
 }

@@ -116,6 +116,13 @@ namespace DB
             return await _context.Contractors.ToListAsync();
         }
 
- 
+       
+        public async Task<List<Building>> GetBuildingAsync()
+        {
+            return await _context.Buildings.ToListAsync();
+        }
+
+
+
     }
 }

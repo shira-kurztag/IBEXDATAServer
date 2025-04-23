@@ -58,5 +58,12 @@ namespace Service
         {
             return await _ProjectDB.GetProjecctByContractor(id);
         }
+
+        public async Task<List<Building>> GetBuildingAsync()
+        {
+            return await _ProjectDB.GetBuildingAsync();
+        }
+
+
     }
 }
