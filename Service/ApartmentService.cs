@@ -40,9 +40,5 @@ namespace Service
         {
             return _ApartmentDB.AddApartmentWithLinkages(buildingId, newLinkagesApartment);
         }
-        public bool BuildingExists(int buildingId)
-        {
-            return _ApartmentDB.BuildingExists(buildingId);
-        }
     }
 }

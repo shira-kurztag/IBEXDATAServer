@@ -26,6 +26,12 @@ namespace Application
             CreateMap<Building, BuildingDTO>();
             CreateMap<Mortagege, MortagegeDTO>().ReverseMap();
 
+            CreateMap<Apartment, ApartmentDTO>();
+            CreateMap<ApartmentDTO, Apartment>().ReverseMap();
+
+            CreateMap<LinkagesApartment, LinkagesapartmentDTO>();
+            CreateMap<LinkagesapartmentDTO, LinkagesApartment>().ReverseMap();
+
         }
     }
 }

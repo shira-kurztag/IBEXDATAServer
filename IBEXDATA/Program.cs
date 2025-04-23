@@ -16,7 +16,6 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 // Add services to the container.                                                                                                                                                                                                                         
-
 builder.Services.AddScoped<IFareService, FareService>();
 builder.Services.AddScoped<IFareDB, FareDB>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
@@ -31,6 +30,8 @@ builder.Services.AddScoped<IContractorDB, ContractorDB>();
 builder.Services.AddScoped<IContractorService, ContractorService>();
 builder.Services.AddScoped<IMortagegeDB, MortagegeDB>();
 builder.Services.AddScoped<IMortagegeService, MortagegeService>();
+builder.Services.AddScoped<IApartmentDB, ApartmentDB>();
+builder.Services.AddScoped<IApartmentService, ApartmentService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

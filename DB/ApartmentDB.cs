@@ -45,39 +45,39 @@ namespace DB
 
         public ApartmentDTO AddApartmentWithLinkages(int buildingId, ApartmentDTO newLinkagesApartment)
         {
-            // הוספת הדירה החדשה
-            Apartment apartment = _mapper.Map<Apartment>(newLinkagesApartment);
-            _context.Set<Apartment>().Add(apartment);
-
             try
             {
+                // הדפסת הנתונים שנשלחים
+                Console.WriteLine($"Adding apartment with data: {newLinkagesApartment}");
+
+                // הוספת הדירה החדשה
+                Apartment apartment = _mapper.Map<Apartment>(newLinkagesApartment);
+                _context.Set<Apartment>().Add(apartment);
                 _context.SaveChanges();
+
+                // קבלת המזהה של הדירה החדשה
+                int newApartmentId = apartment.ApartmentId;
+
+                // החזרת הדירה החדשה יחד עם ההצמדות
+                var res = _context.Set<Apartment>()
+                               .Include(a => a.LinkagesApartments)
+                               .Where(a => a.ApartmentId == newApartmentId)
+                               .FirstOrDefault();
+
+                return _mapper.Map<ApartmentDTO>(res);
+            }
+            catch (DbUpdateException ex)
+            {
+                // הדפסת ההודעה הפנימית של השגיאה
+                Console.WriteLine($"DbUpdateException error: {ex.InnerException?.Message}");
+                throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving changes: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
-                }
+                // הדפסת שגיאות כלליות
+                Console.WriteLine($"Exception error: {ex.Message}");
                 throw;
             }
-
-            // קבלת המזהה של הדירה החדשה
-            int newApartmentId = apartment.ApartmentId;
-
-            // החזרת הדירה החדשה יחד עם ההצמדות
-            var res = _context.Set<Apartment>()
-                           .Include(a => a.LinkagesApartments)
-                           .Where(a => a.ApartmentId == newApartmentId)
-                           .FirstOrDefault();
-
-            return _mapper.Map<ApartmentDTO>(res);
-        }
-        public bool BuildingExists(int buildingId)
-        {
-            return _context.Buildings.Any(b => b.BuildingId == buildingId);
         }
     }
-
 }

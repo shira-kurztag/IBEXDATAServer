@@ -1,5 +1,4 @@
-﻿
-using Common.DTO;
+﻿using Common.DTO;
 using IBEXDATA.Models;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,5 @@ namespace Service
         IEnumerable<Parking> GetParkingByBuilding(int buildingId);
         IEnumerable<LinkageCode> GetLinkagCode();
         ApartmentDTO AddApartmentWithLinkages(int buildingId, ApartmentDTO newLinkagesApartment);
-        bool BuildingExists(int buildingId);
-
     }
 }
