@@ -136,8 +136,21 @@ namespace Application.Controllers
             _logger.LogWarning("Failed to update Project with ID: {ProjectId}", id);
             return NotFound($"Project with ID {id} not found");
         }
+        [Route("GetBuilding")]
+        [HttpGet]
+        public async Task<IActionResult> GetBuildingAsync()
+        {
+            try
+            {
+                var building = await _ProjectService.GetBuildingByAsynce(); // קריאה נכונה לפונקציה
+                return Ok(building); // החזרה תקינה של הנתונים
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message); // טיפול בשגיאות
+            }
+        }
 
-     
     }
 }
 //[Route("GetById")]

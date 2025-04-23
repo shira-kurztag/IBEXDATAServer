@@ -4,6 +4,7 @@ using DB;
 using IBEXDATA.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Service;
 
 namespace Application.Controllers
@@ -43,5 +44,28 @@ namespace Application.Controllers
 
             return Ok(buildingNumbersDTOs);
         }
+        [HttpPost]
+        [Route("AddBuilding")]
+        public ActionResult<BuildingDTO> AddBuilding([FromBody] BuildingDTO newBuilding)
+        {
+            try
+            {
+                if (newBuilding == null)
+                {
+                    return BadRequest("Building data cannot be null.");
+                }
+
+                var addedBuilding = _BuildingService.AddBuilding(newBuilding);
+                return Ok(addedBuilding);
+            }
+            catch (Exception ex)
+            {
+                // הדפסת השגיאה ללוג
+                Console.WriteLine($"Error occurred in Controller: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                return StatusCode(500, "An error occurred while adding the building.");
+            }
+            }
+        }
     }
-}
+
