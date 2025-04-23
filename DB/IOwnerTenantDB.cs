@@ -10,5 +10,6 @@ namespace DB
     public interface IOwnerTenantDB
     {
         Task AddOwnerTenant(OwnerTenant OwnerTenant);
+        Task UpdateOwnerTenant(OwnerTenant OwnerTenant);
     }
 }

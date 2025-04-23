@@ -9,6 +9,9 @@ namespace DB
         Task<List<OwnerTenant>> GetPartAssetByOwnerTenants();
         Task <int> AddTenants (Tenant tenants);
         Task<Apartment> GetTenantsApartment(int ApartmentID);
-       
+        Task UpdateTenant(Tenant tenant);
+
+
+
     }
 }

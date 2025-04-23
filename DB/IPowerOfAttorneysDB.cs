@@ -10,5 +10,7 @@ namespace DB
     public interface IPowerOfAttorneysDB
     {
         Task AddPower(PowerOfAttorney Power);
+
+        Task UpdatePower(PowerOfAttorney Power);
     }
 }

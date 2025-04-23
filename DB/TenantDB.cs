@@ -28,12 +28,12 @@ namespace DB
 
         }
 
-     
+
 
         public async Task<int> AddTenants(Tenant tenants)
         {
-          await _dbContext.Tenants.AddAsync(tenants);
-          
+            await _dbContext.Tenants.AddAsync(tenants);
+
             //await _dbContext.SaveChangesAsync();
             return tenants.TenantId;
 
@@ -61,10 +61,47 @@ namespace DB
                                    .FirstOrDefaultAsync(a => a.ApartmentId == ApartmentID);
 
         }
-       
 
 
+        public async Task UpdateTenant(Tenant tenant)
+        {
+            if (tenant == null)
+            {
+                throw new ArgumentNullException(nameof(tenant), "Tenant cannot be null");
+            }
 
+            // מצא את הדייר הקיים במסד הנתונים
+            var existingTenant = await _dbContext.Tenants
+                                                 .FirstOrDefaultAsync(a => a.TenantId == tenant.TenantId);
+
+            if (existingTenant == null)
+            {
+                throw new InvalidOperationException($"Tenant with ID {tenant.TenantId} not found");
+            }
+
+            // עדכון כל השדות
+            existingTenant.TenantStatus = tenant.TenantStatus;
+            existingTenant.TenantIdentity = tenant.TenantIdentity;
+            existingTenant.IdentityType = tenant.IdentityType;
+            existingTenant.IdentityFromCountry = tenant.IdentityFromCountry;
+            existingTenant.LastName = tenant.LastName;
+            existingTenant.FirstName = tenant.FirstName;
+            existingTenant.IdFileName = tenant.IdFileName;
+            existingTenant.IsSignatureByPowerOfAttorney = tenant.IsSignatureByPowerOfAttorney;
+            existingTenant.PowerOfAttorneyId = tenant.PowerOfAttorneyId;
+            existingTenant.AddressByContract = tenant.AddressByContract;
+            existingTenant.UpdateDate = DateOnly.FromDateTime(DateTime.Now); // עדכון תאריך עדכון
+            existingTenant.SignedAsTrustee = tenant.SignedAsTrustee;
+            existingTenant.PreviousTenantId = tenant.PreviousTenantId;
+            existingTenant.Usname = tenant.Usname;
+            existingTenant.ThereRrePreviousIdentifyingDetails = tenant.ThereRrePreviousIdentifyingDetails;
+            existingTenant.IdentityTypePrevious = tenant.IdentityTypePrevious;
+            existingTenant.IdentityFromCountryPrevious = tenant.IdentityFromCountryPrevious;
+            existingTenant.TenantIdentityPrevious = tenant.TenantIdentityPrevious;
+            existingTenant.PassportExpiredPrevious = tenant.PassportExpiredPrevious;
+            existingTenant.OtherPrevious = tenant.OtherPrevious;
+
+            // שמירת השינויים למסד הנתונים
+        }
     }
 }
-

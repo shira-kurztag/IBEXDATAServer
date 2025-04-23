@@ -58,7 +58,6 @@ namespace Service
 
             return curOwnerTenants.PartAsset.Value;
         }
-
         public async Task AddTenants(List<TenantDTO> tenants)
         {
             if (tenants == null || tenants.Count == 0)
@@ -106,8 +105,12 @@ namespace Service
                         catch (Exception e)
                         {
                             _logger.LogError($"Error adding owner: {e.Message}");
-                            throw new InvalidOperationException("Owner not added.", e);
+                            throw new InvalidOperationException("Failed to add owner.", e);
                         }
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("ApartmentId is invalid.");
                     }
 
                     var savedTenants = new List<Tenant>();
@@ -205,6 +208,47 @@ namespace Service
                     await transaction.RollbackAsync();
                     throw new InvalidOperationException("Operation failed.", e);
                 }
+            }
+        }
+
+        public async Task UpdateTenant(List<TenantDTO2> tenants)
+        {
+            if (tenants == null || tenants.Count == 0)
+            {
+                throw new ArgumentNullException(nameof(tenants), "Tenants cannot be null or empty");
+            }
+
+            // Start a transaction
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                foreach (var tenant in tenants)
+                {
+                    var newOwner = _mapper.Map<OwnerTenant>(tenant);
+                    var newTenant = _mapper.Map<Tenant>(tenant);
+
+                    if (tenant.IsSignatureByPowerOfAttorney == true)
+                    {
+                        var newPower = _mapper.Map<PowerOfAttorney>(tenant);
+                        newPower.Id = tenant.powerId;
+                        await _IPowerOfAttorneysDB.UpdatePower(newPower);
+                    }
+
+                    await _tenantDB.UpdateTenant(newTenant);
+                    await _IOwnerTenantDB.UpdateOwnerTenant(newOwner);
+                }
+                await _dbContext.SaveChangesAsync();
+
+                // Commit the transaction if everything succeeds
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any error occurs
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, "Failed to update tenants. Transaction rolled back.");
+                throw;
             }
         }
     }

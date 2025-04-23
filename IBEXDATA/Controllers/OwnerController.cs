@@ -37,5 +37,12 @@ namespace Application.Controllers
             _logger.LogWarning("Failed to retrieve owners.");
             return BadRequest();
         }
+        [Route("GetTenantById/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetTenantById(int userId)
+        {
+            //var tenant = await _tenantService.GetTenantById(userId);
+            return Ok(5);
+        }
     }
 }

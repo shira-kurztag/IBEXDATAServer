@@ -9,6 +9,7 @@ namespace Service
         Task<double> GetPartAssetByOwnerTenants(int Id);
         Task<Tenant> GetTenantById(int Id);
         Task AddTenants(List<TenantDTO> tenants);
-      
+        Task UpdateTenant(List<TenantDTO2> tenants);
+        
     }
 }

@@ -56,6 +56,7 @@ namespace DB
             }
 
             await _context.Owners.AddAsync(owner);
+            await _context.SaveChangesAsync();
             return owner.OwnerId;
         }
 

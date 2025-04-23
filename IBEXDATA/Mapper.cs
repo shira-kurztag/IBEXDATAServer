@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.DTO;
+using DB;
 using IBEXDATA.Models;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -26,8 +27,11 @@ namespace Application
             CreateMap<Mortagege, MortagegeDTO>().ReverseMap();
 
             CreateMap<TenantDTO, Tenant>().ReverseMap();
-            CreateMap<Owner, OwnerDTO>().ReverseMap();
+            CreateMap<TenantDTO2, Tenant>().ReverseMap();
 
+            CreateMap<Owner, OwnerDTO>().ReverseMap();
+            CreateMap<OwnerTenant, TenantDTO2>().ReverseMap();
+            CreateMap<PowerOfAttorney, TenantDTO2>().ReverseMap();
 
         }
     }
