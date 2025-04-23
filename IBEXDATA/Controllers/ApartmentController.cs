@@ -1,4 +1,6 @@
-﻿using IBEXDATA.Models;
+﻿using AutoMapper;
+using Common.DTO;
+using IBEXDATA.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service;
@@ -10,9 +12,12 @@ namespace Application.Controllers
     public class ApartmentController : ControllerBase
     {
         private readonly IApartmentService _ApartmentService;
-        public ApartmentController(IApartmentService ApartmentService)
+        private readonly IMapper _mapper;
+
+        public ApartmentController(IApartmentService ApartmentService, IMapper mapper)
         {
             _ApartmentService = ApartmentService;
+            _mapper = mapper;
         }
 
 
@@ -39,6 +44,37 @@ namespace Application.Controllers
         public IEnumerable<LinkageCode> GetLinkagCode()
         {
             return _ApartmentService.GetLinkagCode();
+        }
+        [HttpPost("{buildingId}/add-apartment")]
+        public ActionResult<ApartmentDTO> AddApartmentWithLinkages(int buildingId, [FromBody] ApartmentDTO newLinkagesApartment)
+        {
+            if (newLinkagesApartment == null)
+            {
+                return BadRequest("Invalid apartment data.");
+            }
+
+            // בדיקה אם הבניין קיים
+            var buildingExists = _ApartmentService.BuildingExists(buildingId);
+            if (!buildingExists)
+            {
+                return NotFound($"Building with ID {buildingId} not found.");
+            }
+
+            try
+            {
+                var addedApartments = _ApartmentService.AddApartmentWithLinkages(buildingId, newLinkagesApartment);
+                return Ok(addedApartments);
+            }
+            catch (Exception ex)
+            {
+                // הדפסת פרטי השגיאה
+                Console.WriteLine($"Error: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                }
+                return StatusCode(500, "An error occurred while saving the apartment. Please check the logs for more details.");
+            }
         }
     }
 }
