@@ -14,7 +14,6 @@ namespace DB
         private readonly IMapper mapper;
         private readonly ILogger<ContractorDB> _logger;
 
-        private readonly ILogger<ContractorDB> _logger;
 
         public ContractorDB(dbContext dbContext, IMapper _Mapper, ILogger<ContractorDB> logger)
         {

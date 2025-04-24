@@ -46,6 +46,7 @@ namespace Application.Controllers
             var tenant = await _tenantService.GetTenantById(userId);
             return Ok(tenant);
         }
+
         //
         // POST api/<TenantController>
         [HttpPost]
