@@ -1,4 +1,5 @@
 ﻿using Common.DTO;
+using DB;
 using IBEXDATA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
@@ -12,13 +13,16 @@ namespace Application.Controllers
     public class TenantController : ControllerBase
     {
         private readonly ITenantService _tenantService;
+        private readonly IApartmentService _ApartmentService;
 
-        public TenantController(ITenantService tenantService)
+
+        public TenantController(ITenantService tenantService,IApartmentService ApartmentService)
         {
             _tenantService = tenantService;
+            _ApartmentService = ApartmentService;
         }
 
-       [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> GetAllTenants()
         {
             try
@@ -44,22 +48,70 @@ namespace Application.Controllers
         }
         //
         // POST api/<TenantController>
-        //[HttpPost]
-        //public void Post([FromBody] TenantDTO Tenant)
-        //{
+        [HttpPost]
+     
+        public async Task<IActionResult> Post([FromBody] List<TenantDTO> tenants)
+        {
+            if (tenants == null || tenants.Count == 0)
+            {
+                return BadRequest("No tenants provided.");
+            }
 
-        //}
+            try
+            {
+                await _tenantService.AddTenants(tenants);
+                return Ok(new { message = "Tenants added successfully." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An unexpected error occurred. Please try again later." });
+            }
+        }
 
-        //// PUT api/<TenantController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
+        // PUT api/<TenantController>/5
+        [HttpPut]
+        public async Task<IActionResult> Put( [FromBody] List<TenantDTO2> tenants)
+        {
+            if (tenants == null || tenants.Count == 0)
+            {
+                return BadRequest("No tenants provided.");
+            }
+
+            try
+            {
+                await _tenantService.UpdateTenant(tenants);
+                return Ok(new { message = "Tenants added successfully." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An unexpected error occurred. Please try again later." });
+            }
+        }
 
         //// DELETE api/<TenantController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+
+        }
+
+
         [Route("GetPartAssetByOwnerTenants/{Id}")]
         [HttpGet]
         public async Task<ActionResult<double>> GetPartAssetByOwnerTenants(int Id)
@@ -73,6 +125,12 @@ namespace Application.Controllers
 
         }
 
-      
+
+
+
     }
-    }
+
+}
+
+
+    

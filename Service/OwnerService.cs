@@ -16,7 +16,8 @@ namespace Service
         public OwnerService(IOwnerDB OwnerDB)
         {
             _OwnerDB = OwnerDB;
-        }
+        }   
+
 
         public async Task<IEnumerable<Owner>> Get()
         {

@@ -1,4 +1,5 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
+using IBEXDATA.Models;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System;
@@ -41,6 +42,36 @@ namespace DB
                 _logger.Error(ex, "Error in Get method of Get in OwnerDB.");
                 return null;
             }
+        }
+        public async Task<int> AddOwner(Owner owner)
+        {
+            if (owner == null)
+            {
+                throw new ArgumentNullException(nameof(owner), "Owner cannot be null");
+            }
+
+            if (_context == null)
+            {
+                throw new InvalidOperationException("DbContext is not initialized.");
+            }
+
+            await _context.Owners.AddAsync(owner);
+            await _context.SaveChangesAsync();
+            return owner.OwnerId;
+        }
+
+
+        public async Task<Owner> getOwnerByApartmen(int apartmenID)
+        {
+
+            Owner owner = await _context.Owners
+                                       .FirstOrDefaultAsync(a => a.ApartmentId == apartmenID); await _context.SaveChangesAsync();
+            if(owner == null)
+            {
+                 owner=new Owner();
+            }
+            return owner;
+           
         }
     }
 }
