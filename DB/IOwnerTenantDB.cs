@@ -11,5 +11,6 @@ namespace DB
     {
         Task AddOwnerTenant(OwnerTenant OwnerTenant);
         Task UpdateOwnerTenant(OwnerTenant OwnerTenant);
+        Task <List<int>> GetOwnerTenantByOwnerId( int OwnerId);
     }
 }

@@ -59,6 +59,15 @@ namespace DB
 
         }
 
+        public async Task<int> GetTenantsApartment(int ApartmentID)
+        {
+            var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.ApartmentId == ApartmentID);
+            if (apartment == null||apartment.ApartmentId==0)
+            {
+                throw new InvalidOperationException("Apartment not found for the given ApartmentID.");
 
+            }
+            return apartment.ApartmentId;
+        }
     }
 }

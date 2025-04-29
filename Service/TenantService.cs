@@ -251,5 +251,52 @@ namespace Service
                 throw;
             }
         }
+        ///שליפת דיירים לפי דירה
+        public async Task <List<TenantDTO2>> GetTenantByApartment(int apartment)
+        {
+           int Apartment= await _IApartmentDB.GetTenantsApartment(apartment);
+            var owner = await _IOwnerDB.getOwnerByApartmen(Apartment);
+            if (owner == null)
+            {
+                throw new InvalidOperationException("Owner not found for the given ApartmentID.");
+            }
+            var ownerTenants = await _IOwnerTenantDB.GetOwnerTenantByOwnerId(owner.OwnerId);
+            List <TenantDTO2> l= new List<TenantDTO2>();
+            foreach (var ownerTenant1 in ownerTenants)
+            {
+                var tenant =await _tenantDB.GetTenantById(ownerTenant1);
+                if (tenant == null)
+                {
+                    throw new InvalidOperationException("ownerTenant1 not found for the given tenantID.");
+
+                }
+                var OwnerTenants = await _tenantDB.GetPartAssetByOwnerTenants();
+                var curOwnerTenants = OwnerTenants.Find(x => x.TenantId == tenant.TenantId);
+                var PartAsset1=0;
+                if (curOwnerTenants == null || curOwnerTenants.PartAsset == null)
+                {
+                    PartAsset1= 0;
+                    tenant.PartAsset = PartAsset1;
+
+                }
+                else
+                {
+                    var PartAsset = curOwnerTenants.PartAsset.Value;
+                    tenant.PartAsset = PartAsset;
+                }
+               
+                tenant.ApartmentId = Apartment;
+                l.Add(tenant);
+                //לא לשכוח 
+                // להביא את הנתונים של יפוי כוח
+            }
+            if (l == null || l.Count == 0)
+            {
+                throw new InvalidOperationException("Tenant not found or PartAsset is null.");
+            }
+            
+            return l;
+        }
+
     }
 }

@@ -10,6 +10,6 @@ namespace Service
         Task<Tenant> GetTenantById(int Id);
         Task AddTenants(List<TenantDTO> tenants);
         Task UpdateTenant(List<TenantDTO2> tenants);
-        
+        Task<List<TenantDTO2>> GetTenantByApartment(int apartment);
     }
 }

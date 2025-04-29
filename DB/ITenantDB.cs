@@ -10,6 +10,7 @@ namespace DB
         Task <int> AddTenants (Tenant tenants);
         Task<Apartment> GetTenantsApartment(int ApartmentID);
         Task UpdateTenant(Tenant tenant);
+        Task <TenantDTO2> GetTenantById(int ownerTenant1); 
 
 
 

@@ -46,7 +46,30 @@ namespace Application.Controllers
             var tenant = await _tenantService.GetTenantById(userId);
             return Ok(tenant);
         }
-
+        [Route("GetTenantByApartment/{apartment}")]
+        [HttpGet]
+        public async Task<IActionResult> GetTenantByApartment(int apartment)
+        {
+            try
+            {
+                // קבל את הרשימה של הדיירים מהשירות
+                var tenants = await _tenantService.GetTenantByApartment(apartment);
+                // החזר את הרשימה בתגובה
+                return Ok(tenants);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An unexpected error occurred. Please try again later." });
+            }
+        }
         //
         // POST api/<TenantController>
         [HttpPost]

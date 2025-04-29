@@ -41,11 +41,8 @@ namespace DB
         }
 
         public async Task<List<Tenant>> GetAllTenants()
-
         {
             _logger.LogInformation("Starting UpdateContractor");
-
-
             return await _dbContext.Tenants.ToListAsync();
         }
 
@@ -54,6 +51,41 @@ namespace DB
             return await _dbContext.OwnerTenants.ToListAsync();
 
         }
+
+        public async Task <TenantDTO2> GetTenantById(int ownerTenant1)
+        {
+            var t= await _dbContext.Tenants.Where(a => a.TenantId == ownerTenant1)
+                .Select(a => new TenantDTO2
+                {
+                    TenantId = a.TenantId,
+                    LastName= a.LastName,
+                    FirstName = a.FirstName,
+                    TenantIdentity = a.TenantIdentity,
+                    IdentityType = a.IdentityType,
+                    TenantStatus = a.TenantStatus,
+                    IdFileName = a.IdFileName,
+
+                    IdentityFromCountry = a.IdentityFromCountry,
+                    Usname = a.Usname,
+                    PreviousTenantId = a.PreviousTenantId,
+                    IdentityTypePrevious = a.IdentityTypePrevious,
+                    TenantIdentityPrevious = a.TenantIdentityPrevious,
+                    OtherPrevious = a.OtherPrevious,
+
+                    IsSignatureByPowerOfAttorney = a.IsSignatureByPowerOfAttorney,
+                    PowerOfAttorneyId = a.PowerOfAttorneyId,
+                
+                }).FirstOrDefaultAsync();
+            if (t == null)
+            {
+                throw new InvalidOperationException($"Tenant with ID {ownerTenant1} not found.");
+            }
+            return t;
+//        public double? PartAsset { get; set; } // חלק בנכס
+//        public int ApartmentId { get; set; }//דירה מויממת לדייר
+//        public int powerId { get; set; }
+    }
+
         //בדיקה האם קיים דירה מסוימת 
         public async Task<Apartment> GetTenantsApartment(int ApartmentID)
         {

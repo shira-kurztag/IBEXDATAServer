@@ -20,6 +20,19 @@ namespace DB
             _logger = logger;
             _context = context;
         }
+
+        public async Task<List<int>> GetOwnerTenantByOwnerId(int OwnerId)
+        {
+            var TenantsID = await _context.OwnerTenants
+                .Where(ot => ot.OwnerId == OwnerId)
+                .Select(ot => ot.TenantId)
+                .ToListAsync();
+
+            if (TenantsID == null || !TenantsID.Any())
+                throw new InvalidOperationException($"No tenants found for the given OwnerId: {OwnerId}.");
+
+            return TenantsID;
+        }
         public async Task AddOwnerTenant(OwnerTenant ownerTenant)
         {
             if (ownerTenant == null)

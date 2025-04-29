@@ -65,7 +65,7 @@ namespace DB
         {
 
             Owner owner = await _context.Owners
-                                       .FirstOrDefaultAsync(a => a.ApartmentId == apartmenID); await _context.SaveChangesAsync();
+                                       .FirstOrDefaultAsync(a => a.ApartmentId == apartmenID); 
             if(owner == null)
             {
                  owner=new Owner();
