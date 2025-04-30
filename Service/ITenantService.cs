@@ -11,5 +11,6 @@ namespace Service
         Task AddTenants(List<TenantDTO> tenants);
         Task UpdateTenant(List<TenantDTO2> tenants);
         Task<List<TenantDTO2>> GetTenantByApartment(int apartment);
+        Task DeleteTenant(int tenantId);
     }
 }

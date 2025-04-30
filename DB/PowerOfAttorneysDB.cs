@@ -19,11 +19,21 @@ namespace DB
             _context = context;
         }
 
-        public async Task AddPower(PowerOfAttorney power)
+        public async Task <int>AddPower(PowerOfAttorney power)
         {
             await _context.PowerOfAttorneys.AddAsync(power);
+            await _context.SaveChangesAsync();
+            return power.Id;
+
         }
-     
+
+        
+         public async Task<PowerOfAttorney> GetPowerById(int powerId)
+         {
+             return await _context.PowerOfAttorneys.FirstOrDefaultAsync(p => p.Id == powerId);
+         }
+
+        
 
         public async Task UpdatePower(PowerOfAttorney Power)
         {
@@ -32,6 +42,10 @@ namespace DB
             {
                 throw new ArgumentNullException(nameof(Power), "Tenant cannot be null");
             }
+            if(Power.Id!=0|| Power.Id != null)
+            {
+
+            
 
             // מצא את הדייר הקיים במסד הנתונים
             var existingPower = await _context.PowerOfAttorneys
@@ -56,6 +70,8 @@ namespace DB
             
 
             _logger.LogInformation("Power of attorney updated successfully.");
+            
+            }
 
         }
     }

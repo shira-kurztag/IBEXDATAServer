@@ -40,6 +40,16 @@ namespace DB
 
         }
 
+        public async Task Delete(int tenantId)
+        {
+            var tenant = await _dbContext.Tenants.FindAsync(tenantId); // שימוש ב-FindAsync
+            if (tenant != null)
+            {
+                _dbContext.Tenants.Remove(tenant); // אין צורך ב-await כאן
+                await _dbContext.SaveChangesAsync(); // שימוש ב-SaveChangesAsync
+            }
+        }
+
         public async Task<List<Tenant>> GetAllTenants()
         {
             _logger.LogInformation("Starting UpdateContractor");

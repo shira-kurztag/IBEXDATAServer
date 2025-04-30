@@ -64,5 +64,47 @@ namespace DB
 
         }
 
+        public async Task<List<OwnerTenant>> GetOwnerTenantBytenantId(int tenantId)
+        {
+            if (tenantId == 0)
+            {
+                throw new InvalidOperationException("Tenant not found.");
+            }
+
+            // שליפת רשימת OwnerTenants לפי TenantId
+            var ownerTenantsByTenantId = await _context.OwnerTenants
+                .Where(a => a.TenantId == tenantId)
+                .ToListAsync();
+
+            if (ownerTenantsByTenantId == null || !ownerTenantsByTenantId.Any())
+            {
+                throw new InvalidOperationException("No OwnerTenants found for the given TenantId.");
+            }
+
+            // שליפת כל ה-OwnerId מתוך התוצאה הקודמת
+            var ownerIds = ownerTenantsByTenantId.Select(o => o.OwnerId).Distinct().ToList();
+
+            // שליפת כל OwnerTenants נוספים לפי ה-OwnerId שמצאנו קודם
+            var allOwnerTenants = await _context.OwnerTenants
+                .Where(o => ownerIds.Contains(o.OwnerId))
+                .ToListAsync();
+
+            return allOwnerTenants;
+        }
+
+        public async Task Delete(int TenantId)
+        {
+            // מצא את הרשומות שברצונך למחוק
+            var tenantsToDelete = await _context.OwnerTenants
+                .Where(a => a.TenantId == TenantId)
+                .ToListAsync();
+
+            if (tenantsToDelete == null || !tenantsToDelete.Any())
+            {
+                throw new InvalidOperationException("No tenants found with the specified TenantId.");
+            }
+            _context.OwnerTenants.RemoveRange(tenantsToDelete);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace DB
         Task<Apartment> GetTenantsApartment(int ApartmentID);
         Task UpdateTenant(Tenant tenant);
         Task <TenantDTO2> GetTenantById(int ownerTenant1); 
+        Task Delete (int tenantId);
 
 
 

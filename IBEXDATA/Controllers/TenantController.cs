@@ -112,7 +112,7 @@ namespace Application.Controllers
             try
             {
                 await _tenantService.UpdateTenant(tenants);
-                return Ok(new { message = "Tenants added successfully." });
+                return Ok(new { message = "Tenants Update successfully." });
             }
             catch (InvalidOperationException ex)
             {
@@ -129,10 +129,31 @@ namespace Application.Controllers
         }
 
         //// DELETE api/<TenantController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{tenantId}")]
+        public async Task<IActionResult> Delete(int tenantId)
         {
+            if (tenantId == null || tenantId == 0)
+            {
+                return BadRequest("No tenants provided.");
+            }
 
+            try
+            {
+                await _tenantService.DeleteTenant(tenantId);
+                return Ok(new { message = "Tenants delete  successfully." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An unexpected error occurred. Please try again later." });
+            }
         }
 
 

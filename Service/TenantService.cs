@@ -4,6 +4,7 @@ using DB;
 using IBEXDATA.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -135,7 +136,6 @@ namespace Service
                                 FirstName = t.FirstName,
                                 IdFileName = t.IdFileName,
                                 IsSignatureByPowerOfAttorney = t.IsSignatureByPowerOfAttorney,
-                                PowerOfAttorneyId = t.PowerOfAttorneyId,
                                 PreviousTenantId = t.PreviousTenantId,
                                 OtherPrevious = t.OtherPrevious,
                                 TenantIdentityPrevious = t.TenantIdentityPrevious,
@@ -162,8 +162,10 @@ namespace Service
                                     NumberPhone = t.NumberPhone,
                                     NumberPhone2 = t.NumberPhone2
                                 };
+                             
 
-                                await _IPowerOfAttorneysDB.AddPower(power);
+                              int id = await _IPowerOfAttorneysDB.AddPower(power);
+                                tenant.PowerOfAttorneyId = id.ToString();
                             }
 
                             await _tenantDB.AddTenants(tenant);
@@ -227,12 +229,18 @@ namespace Service
                 {
                     var newOwner = _mapper.Map<OwnerTenant>(tenant);
                     var newTenant = _mapper.Map<Tenant>(tenant);
+                   
 
-                    if (tenant.IsSignatureByPowerOfAttorney == true)
+                    if (newTenant.IsSignatureByPowerOfAttorney == true)
                     {
                         var newPower = _mapper.Map<PowerOfAttorney>(tenant);
-                        newPower.Id = tenant.powerId;
-                        await _IPowerOfAttorneysDB.UpdatePower(newPower);
+                        string str = newPower.PowerOfAttorneyId;
+                        Console.WriteLine(str + "str"); // התוצאה: 123
+
+                        if (int.TryParse(str, out int num)) { 
+                            newPower.Id = num;
+                            await _IPowerOfAttorneysDB.UpdatePower(newPower);
+                        }
                     }
 
                     await _tenantDB.UpdateTenant(newTenant);
@@ -286,9 +294,52 @@ namespace Service
                 }
                
                 tenant.ApartmentId = Apartment;
-                l.Add(tenant);
                 //לא לשכוח 
                 // להביא את הנתונים של יפוי כוח
+                if(tenant.IsSignatureByPowerOfAttorney == true)
+                {
+
+                    string str = tenant.PowerOfAttorneyId;
+                    Console.WriteLine(str+"str"); // התוצאה: 123
+
+                    if (int.TryParse(str, out int num))
+                    {
+                        Console.WriteLine(num); // התוצאה: 123
+                        var power = await _IPowerOfAttorneysDB.GetPowerById(num);
+                        if (power != null)
+                        {
+                            tenant.FirstNamePower = power.FirstName;
+                            tenant.LastNamePower = power.LastName;
+                            tenant.IdFileNamePower = power.IdFileName;
+                            tenant.PowerOfAttorneyType = power.PowerOfAttorneyType;
+                            tenant.FromDate = power.FromDate;
+                            tenant.FileName = power.FileName;
+                            tenant.Address = power.Address;
+                            tenant.NumberPhone = power.NumberPhone;
+                            tenant.NumberPhone2 = power.NumberPhone2;
+                        }
+                        //tenant = _mapper.Map<TenantDTO2>(power);
+                        //tenant.IsSignatureByPowerOfAttorney = true;
+                        Console.WriteLine(tenant);
+                    }
+                    else
+                    {
+                        Console.WriteLine("The string is not a valid integer.");
+                    }
+                    
+
+                }
+                //string idAsString = tenant.PowerOfAttorneyId;
+
+                // שיטה 1: שימוש ב-int.TryParse()
+                //if (int.TryParse(idAsString, out int id))
+                //{
+                //    Console.WriteLine($"ההמרה הצליחה! id: {id}");
+                //}
+                //var p = await _IPowerOfAttorneysDB.GetPowerById(id);
+
+                l.Add(tenant);
+               
             }
             if (l == null || l.Count == 0)
             {
@@ -298,5 +349,35 @@ namespace Service
             return l;
         }
 
+        public async Task DeleteTenant(int tenantId)
+        {
+            if(tenantId == 0 || tenantId == null)
+            {
+                throw new InvalidOperationException("Tenant not found.");
+            }
+            var OwnerTenants = await _IOwnerTenantDB.GetOwnerTenantBytenantId(tenantId);
+            if (OwnerTenants==null|| OwnerTenants.Count == 0)
+            {
+                throw new NotImplementedException();
+
+            }
+            if(OwnerTenants.Count == 1)
+            {
+                ///Owner אם זה יש דייר אחד אז צריך למחוק גם מטבלה 
+            }
+            if (OwnerTenants.Count >= 2)
+            {
+                await _IOwnerTenantDB.Delete(tenantId);
+                //למחוק את היפוי כוח 
+
+                await _tenantDB.Delete(tenantId);
+            }
+            //if (OwnerTenants== 1)
+            //{
+
+            //}
+
+            throw new NotImplementedException();
+        }
     }
 }
