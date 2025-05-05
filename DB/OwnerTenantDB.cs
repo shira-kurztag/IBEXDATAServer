@@ -82,11 +82,15 @@ namespace DB
             }
 
             // שליפת כל ה-OwnerId מתוך התוצאה הקודמת
-            var ownerIds = ownerTenantsByTenantId.Select(o => o.OwnerId).Distinct().ToList();
+            //var ownerIds = ownerTenantsByTenantId.Select(o => o.OwnerId).Distinct().ToList();
+            var ownerId = ownerTenantsByTenantId
+                .Select(o => o.OwnerId) // בחר רק את ה-ID
+                 .Distinct()             // הסר כפילויות
+                 .FirstOrDefault();
 
             // שליפת כל OwnerTenants נוספים לפי ה-OwnerId שמצאנו קודם
             var allOwnerTenants = await _context.OwnerTenants
-                .Where(o => ownerIds.Contains(o.OwnerId))
+                .Where(o => o.OwnerId== ownerId)
                 .ToListAsync();
 
             return allOwnerTenants;

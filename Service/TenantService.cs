@@ -360,12 +360,8 @@ namespace Service
                 throw new NotImplementedException();
 
             }
-            if (OwnerTenants.Count == 1)
-            {
-               int OwnerId = OwnerTenants[0].OwnerId;
-                await _IOwnerDB.Delete(OwnerId);
-            }
-           
+            
+            
                 await _IOwnerTenantDB.Delete(tenantId);
                 //למחוק את היפוי כוח 
                 var t = await _tenantDB.GetTenantById1(tenantId);
@@ -373,7 +369,12 @@ namespace Service
                 {
                     throw new InvalidOperationException("Tenant not found.");
                 }
-                if (t.IsSignatureByPowerOfAttorney)
+            if (OwnerTenants.Count == 1)
+            {
+                int OwnerId = OwnerTenants[0].OwnerId;
+                await _IOwnerDB.Delete(OwnerId);
+            }
+            if (t.IsSignatureByPowerOfAttorney)
                 {
                     if (int.TryParse(t.PowerOfAttorneyId, out int num))
                     {
@@ -388,9 +389,10 @@ namespace Service
                     await _tenantDB.Delete(tenantId);
 
                 }
-      
 
-            }
+
+            
+        }
         
     }
 }

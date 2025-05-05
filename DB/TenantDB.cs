@@ -86,6 +86,8 @@ namespace DB
                     PowerOfAttorneyId = a.PowerOfAttorneyId,
                 
                 }).FirstOrDefaultAsync();
+
+            ///אם הדייר לא קיים אז צריך שיחזיר אוביקט ריק 
             if (t == null)
             {
                 throw new InvalidOperationException($"Tenant with ID {ownerTenant1} not found.");
