@@ -3,10 +3,12 @@
 namespace DB
 {
     public interface IMortagegeDB
-    {
+     {
         Task<List<CurrencyType>> GetAllCurrencyTypes();
         Task<List<MortagegeLevel>> GetAllMortagegeLevels();
         Task<List<MortagegesType>> GetAllMortagegesTypes();
-        Task CreateMortagege(Mortagege mortagege, MortgageToTeanant mortgageToTeanant);
+        Task<int> CreateMortagege(Mortagege mortagege);
+        Task SaveFullMortgage(Mortagege mortgage,List< MortgageToTeanant> mortgageToTenant);
+        Task<List<TypeMessage>> GetAllTypeMessages();
     }
 }

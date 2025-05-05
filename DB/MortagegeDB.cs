@@ -31,6 +31,12 @@ namespace DB
             return await _dbContext.MortagegesTypes.ToListAsync();
 
         }
+
+        public async Task<List<TypeMessage>> GetAllTypeMessages()
+        {
+            return await _dbContext.TypeMessages.ToListAsync();
+
+        }
         /// <summary>
         /// /קבלת סוגי מטבעות
         /// </summary>
@@ -49,13 +55,56 @@ namespace DB
             return await _dbContext.MortagegeLevels.ToListAsync();
 
         }
-        public async Task CreateMortagege(Mortagege mortagege, MortgageToTeanant mortgageToTeanant)
+  
+        public async Task SaveFullMortgage(Mortagege mortgage, List<MortgageToTeanant > mortgageToTenants)
+        {
+            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Retrieve the existing mortgage entity from the database
+                    var existingMortgage = await _dbContext.Mortageges.FindAsync(mortgage.MortagegeId);
+                    if (existingMortgage == null)
+                    {
+                        throw new Exception("Mortgage not found.");
+                    }
+
+                    // Update only the provided fields
+                    var properties = typeof(Mortagege).GetProperties();
+                    foreach (var property in properties)
+                    {
+                        var newValue = property.GetValue(mortgage);
+                        if (newValue != null && !newValue.Equals(property.GetValue(existingMortgage)))
+                        {
+                            property.SetValue(existingMortgage, newValue);
+                        }
+                    }
+;
+                    await _dbContext.SaveChangesAsync();
+
+
+                    foreach (var mortgageToTeanant in mortgageToTenants)
+                    {
+                        mortgageToTeanant.MortgageId = mortgage.MortagegeId; // קישור למשכנתא הנוכחית
+                        await _dbContext.Set<MortgageToTeanant>().AddAsync(mortgageToTeanant);
+                    }
+                    await _dbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+        }
+
+        public async Task<int> CreateMortagege(Mortagege mortagege)
         {
             await _dbContext.Mortageges.AddAsync(mortagege);
             await _dbContext.SaveChangesAsync();
-            mortgageToTeanant.MortgageId = mortagege.MortagegeId;
-            await _dbContext.Set<MortgageToTeanant>().AddAsync(mortgageToTeanant);
-            await _dbContext.SaveChangesAsync();
+            return  mortagege.MortagegeId;
         }
     }
 }

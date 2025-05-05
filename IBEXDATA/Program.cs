@@ -7,6 +7,8 @@ using Service;
 using Serilog;
 using Microsoft.OpenApi.Models;
 using Application.Controllers;
+using System.Text.Json.Serialization;
+using Common.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +16,13 @@ var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs\\log-.txt", rollingInterval: RollingInterval.Day) // לוגים לקובץ
     .CreateLogger();
-
-// Add services to the container.                                                                                                                                                                                                                         
-
+builder.Services.AddScoped<IAdminApprovalDB, AdminApprovalDB>();
+builder.Services.AddScoped<IAdminApprovalService, AdminApprovalService>();
+// Add services to the container.
+builder.Services.AddScoped<IUserDB, UserDB>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICommentDB, CommentDB>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IFareService, FareService>();
 builder.Services.AddScoped<IFareDB, FareDB>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
@@ -100,7 +106,10 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); // הוספת ReferenceHandler
 
 // Add authentication services
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -111,22 +120,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseDeveloperExceptionPage();
-
-//    // Enable middleware to serve generated Swagger as a JSON endpoint.
-//    app.UseSwagger();
-
-//    // Enable middleware to serve Swagger UI (HTML, JS, CSS, etc.)
-//    app.UseSwaggerUI(c =>
-//    {
-//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "project API V1");
-//        c.RoutePrefix = string.Empty; // Serve Swagger UI at the app's root
-//    });
-//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

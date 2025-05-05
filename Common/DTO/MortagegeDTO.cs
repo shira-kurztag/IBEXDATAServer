@@ -33,10 +33,13 @@ namespace Common.DTO
         /// MortgageToTeanantנוסיף ל
         /// </summary>
 
-        public int TeanantId { get; set; }
+        public List<int>? TeanantId { get; set; } 
 
 
         public int? MortagegesType { get; set; }
+
+        public bool IsAllTenantlpprovat { get; set; }
+       
 
     }
 }

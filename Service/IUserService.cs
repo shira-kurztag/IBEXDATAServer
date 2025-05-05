@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public interface IOwnerTenantService
+    public interface IUserService
     {
-        Task<List<Tenant>> GetAllownerTenantByOwners(List<Owner> owners);
-  
 
+         Task<List<User>> GetAllAdmin();
     }
 }

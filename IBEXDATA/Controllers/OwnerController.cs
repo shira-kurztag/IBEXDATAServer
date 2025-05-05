@@ -15,14 +15,15 @@ namespace Application.Controllers
         private readonly IOwnerService _OwnerService;
         private readonly ILogger<BankController> _logger;
         private readonly IMapper _mapper;
-
-        public OwnerController(IOwnerService OwnerService, ILogger<BankController> logger, IMapper mapper)
+        private readonly IOwnerTenantService _OwnerTenantService;
+        public OwnerController(IOwnerService OwnerService, ILogger<BankController> logger, IMapper mapper, IOwnerTenantService OwnerTenantService)
         {
+
             _OwnerService = OwnerService;
             _logger = logger;
             _mapper = mapper;
+            _OwnerTenantService = OwnerTenantService;
         }
-
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -49,21 +50,33 @@ namespace Application.Controllers
                     return NotFound();
                 }
 
+                // הוספת לוגים כדי לוודא שהנתונים הם מה שציפית
+                Console.WriteLine("Sending owners to Swagger: " + owners.Count);
+                owners.ForEach(owner => Console.WriteLine(owner.ToString()));
+
                 return Ok(owners);
             }
             catch (ApplicationException ex)
             {
                 // Log the exception (e.g., using a logging framework)
+                Console.WriteLine("ApplicationException: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
             catch (Exception ex)
             {
                 // Log the exception (e.g., using a logging framework)
+                Console.WriteLine("Exception: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
             }
         }
 
       
+        [HttpPost("GetAllOwnersByTenants")]
+        public async Task<IActionResult> GetAllOwnersByTenants([FromBody] List<int> tenants)
+        {
+            var result = await _OwnerService.GetAllOwnersByTenants(tenants);
+            return Ok(result);
+        }
 
     }
 }

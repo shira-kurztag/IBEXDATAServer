@@ -1,4 +1,4 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public interface IOwnerTenantService
+    public interface IAdminApprovalService
     {
-        Task<List<Tenant>> GetAllownerTenantByOwners(List<Owner> owners);
-  
+       Task CreateAdminApproval(AdminApprovalDTO adminApprovalDTO);
+
 
     }
 }

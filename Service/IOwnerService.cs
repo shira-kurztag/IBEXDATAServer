@@ -14,5 +14,8 @@ namespace Service
         Task<List<Tenant>> GetOwnerByApartment(int apartmentId);
 
 
+        Task<List<Owner>> GetOwnersByIds(List<int> ownersIds);
+        Task<List<Owner>> GetAllOwnersByTenants(List<int> tenants);
+
     }
 }

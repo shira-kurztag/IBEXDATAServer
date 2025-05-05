@@ -13,12 +13,13 @@ namespace Service
 
         private readonly IOwnerTenantDB _ownerTenantRepository;
         private readonly ITenantService _tenantService;
+       
 
-
-        public OwnerTenantService(IOwnerTenantDB ownerTenantRepository, ITenantService tenantService)
+        public OwnerTenantService(IOwnerTenantDB ownerTenantRepository, ITenantService tenantService )
         {
             _ownerTenantRepository = ownerTenantRepository;
             _tenantService = tenantService;
+           
         }
         public async Task<List<Tenant>> GetAllownerTenantByOwners(List<Owner> owners)
         {
@@ -29,10 +30,13 @@ namespace Service
            .Distinct()
            .ToList();
 
-            // קבלת כל ה-Tenants לפי TenantId
+            tenantIds.ForEach(id => Console.WriteLine(id.ToString()));
             var tenants = await _tenantService.GetTenantsByIds(tenantIds);
-
+         
+            tenants.ForEach(tenant => Console.WriteLine(tenant.ToString()));
             return tenants;
         }
+
+
     }
 }

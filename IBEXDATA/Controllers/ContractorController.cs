@@ -37,8 +37,7 @@ namespace Application.Controllers
             }
         }
 
-        /// not work
-
+   
 
         [HttpPost]
         public async Task<IActionResult> CreateContractor(ContractorDTO2 contractor)

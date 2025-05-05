@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.DTO;
+using DB;
 using IBEXDATA.Models;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -9,14 +10,16 @@ namespace Application
     {
         public Mapper()
         {
-            // Mapping from ProjectCreateDTO to Project
+            CreateMap<AdminApprovalDTO, AdminApproval>().ReverseMap();
+            CreateMap<AdminApprovalDTO, AdminApproval>()
+         .ForMember(dest => dest.ReciverId, opt => opt.Ignore());
             CreateMap<ProjectCreateDTO, Project>();
             CreateMap<Project, ProjectCreateDTO>();
 
-            // Mapping from Project to ProjectDTO
+         
             CreateMap<Project, ProjectDTO>();
 
-            // Mapping from Bank to BankDTO
+       
             CreateMap<Bank, BankDTO>();
             CreateMap<BankDTO, Bank>();
             CreateMap<Bank, BankNamesDTO>();

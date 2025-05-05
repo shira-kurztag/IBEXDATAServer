@@ -39,16 +39,38 @@ namespace Service
 
         }
 
-        public async Task CreateMortagege(MortagegeDTO mortagegeDTO)
+        public async Task SaveFullMortagege(MortagegeDTO mortagegeDTO, int mortagegeId)
         {
             var mortagege = _mapper.Map<Mortagege>(mortagegeDTO);
-            var mortgageToTeanant = new MortgageToTeanant
+            var mortgageToTeanants = new List<MortgageToTeanant>();
+            if (mortagege.AmountType == -1)
+                mortagege.AmountType = null;
+            // חוזר על כל מזהה דייר ברשימת TeanantId
+            foreach (var tenantId in mortagegeDTO.TeanantId)
             {
-                TeanantId = mortagegeDTO.TeanantId  
-            };
+                var mortgageToTeanant = new MortgageToTeanant
+                {
+                    MortgageId = mortagegeId, // מזהה המשכנתה
+                    TeanantId = tenantId      // מזהה הדייר
+                };
 
-            await _mortagegeDB.CreateMortagege(mortagege, mortgageToTeanant);
+                mortgageToTeanants.Add(mortgageToTeanant);
+            }
+            mortagege.MortagegeId = mortagegeId;
+            await _mortagegeDB.SaveFullMortgage(mortagege, mortgageToTeanants);
         }
 
+        public async Task<int> CreateMortagege(MortagegeDTO mortagegeDTO)
+        {
+            var mortagege = _mapper.Map<Mortagege>(mortagegeDTO);
+         
+            
+          return  await _mortagegeDB.CreateMortagege(mortagege);
+        }
+        public async Task<List<TypeMessage>> GetAllTypeMessages()
+        {
+
+            return await _mortagegeDB.GetAllTypeMessages();
+        }
     }
 }

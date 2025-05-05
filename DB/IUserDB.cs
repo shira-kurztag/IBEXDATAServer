@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service
+namespace DB
 {
-    public interface IOwnerTenantService
+    public interface IUserDB
     {
-        Task<List<Tenant>> GetAllownerTenantByOwners(List<Owner> owners);
-  
-
+        Task<List<User>> GetAllUsers();
+        //Task<User> GetUserById(int id);
     }
 }
+ 

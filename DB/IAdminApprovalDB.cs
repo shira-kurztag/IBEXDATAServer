@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service
+namespace DB
 {
-    public interface IOwnerTenantService
+    public interface IAdminApprovalDB
     {
-        Task<List<Tenant>> GetAllownerTenantByOwners(List<Owner> owners);
-  
 
+        Task CreateAdminApproval(AdminApproval adminApproval);
     }
 }
