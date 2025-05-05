@@ -14,7 +14,6 @@ namespace Service
         {
             _buildingDB = buildingDB;
         }
-
         public async Task<IEnumerable<Building>> GetBuildingNumbersByProjectId(int projectId)
         {
             return await _buildingDB.GetBuildingNumbersByProjectId(projectId);
@@ -29,5 +28,22 @@ namespace Service
             // קריאה לפונקציה ב-Repository
             return _buildingDB.AddBuilding(newBuilding);
         }
+
+
+        public async Task<List<Building>> GetAllBuilding()
+        {
+            return await _buildingDB.GetAllBuilding();
+        }
+        public async Task<List<Building>> DeleteBuildingByIdAsync(int id)
+        {
+            return await _buildingDB.DeleteBuildingByIdAsync(id);
+        }
+        public async Task<Building> GetAllBuildingByProject(int Id)
+        {
+            var Buildings = await _buildingDB.GetAllBuildingByProject();
+            return Buildings.Find(x => x.BuildingId == Id);
+        }
+
+
     }
 }

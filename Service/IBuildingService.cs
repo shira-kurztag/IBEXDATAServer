@@ -7,5 +7,10 @@ namespace Service
     {
         Task<IEnumerable<Building>> GetBuildingNumbersByProjectId(int projectId);
         BuildingDTO AddBuilding(BuildingDTO newBuilding);
+        Task<List<Building>> GetAllBuilding();
+        Task<List<Building>> DeleteBuildingByIdAsync(int id);
+        Task<Building> GetAllBuildingByProject(int Id);
+
+
     }
 }

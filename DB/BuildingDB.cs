@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Common.DTO;
+﻿using Common.DTO;
 using IBEXDATA.Models;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -10,22 +9,19 @@ namespace DB
 {
     public class BuildingDB : IBuildingDB
     {
-        private readonly IMapper _mapper;
-
         private readonly dbContext _context;
         private static readonly Serilog.ILogger _logger = Log.ForContext<ProjectDB>(); // Create a logger instance
 
-        public BuildingDB(dbContext context, IMapper mapper)
+        public BuildingDB(dbContext context)
         {
             _context = context;
-            _mapper = mapper;
-
         }
+
 
         public async Task<IEnumerable<Building>> GetBuildingNumbersByProjectId(int projectId)
         {
             _logger.Information($"Fetching building numbers for project ID: {projectId}");
-            return await _context.Buildings.Where(x=> x.ProjectId == projectId).ToListAsync();
+            return await _context.Buildings.Where(x => x.ProjectId == projectId).ToListAsync();
         }
         public BuildingDTO AddBuilding(BuildingDTO newBuilding)
         {
@@ -55,10 +51,28 @@ namespace DB
                 building.BuildingNumber
             );
         }
-        //.Where(b => b.ProjectId == projectId)
-        //    .Select(b => b.BuildingNumber)
+        public async Task<List<Building>> GetAllBuilding()
+        {
+            return await _context.Buildings.ToListAsync();
+        }
+        public async Task<List<Building>> DeleteBuildingByIdAsync(int id)
+        {
+            var building = await _context.Set<Building>().FindAsync(id);
+            if (building == null)
+            {
+                return null; // Building not found
+            }
+
+            _context.Set<Building>().Remove(building);
+            await _context.SaveChangesAsync();
+
+            // Return the updated list of buildings
+            return await _context.Set<Building>().ToListAsync();
+        }
+        public async Task<List<Building>> GetAllBuildingByProject()
+        {
+            return await _context.Buildings.ToListAsync();
+        }
     }
 
-    //.Where(b => b.ProjectId == projectId)
-    //    .Select(b => b.BuildingNumber)
 }
