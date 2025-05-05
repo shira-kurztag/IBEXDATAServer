@@ -96,6 +96,17 @@ namespace DB
 //        public int powerId { get; set; }
     }
 
+        public async Task<Tenant> GetTenantById1(int tenantId)
+        {
+            var t=await _dbContext.Tenants
+                .FirstOrDefaultAsync(a => a.TenantId == tenantId);
+            if (t == null)
+            {
+                throw new InvalidOperationException($"Tenant with ID {tenantId} not found.");
+            }
+            return t;
+        }
+
         //בדיקה האם קיים דירה מסוימת 
         public async Task<Apartment> GetTenantsApartment(int ApartmentID)
         {

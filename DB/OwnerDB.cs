@@ -73,5 +73,20 @@ namespace DB
             return owner;
            
         }
+
+        public async Task Delete(int ownerId)
+        {
+
+            var ower=await _context.
+                Owners
+                .FirstOrDefaultAsync(a => a.OwnerId == ownerId);
+            if (ower == null)
+            {
+                throw new NotImplementedException();
+            }
+            _context.Owners.Remove(ower);
+            await _context.SaveChangesAsync();
+
+        }
     }
 }

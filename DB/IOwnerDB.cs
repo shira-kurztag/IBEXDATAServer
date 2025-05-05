@@ -13,5 +13,6 @@ namespace DB
         Task<IEnumerable<Owner>> Get();
         Task<int> AddOwner(Owner owner);
         Task<Owner> getOwnerByApartmen(int apartmenID);
+        Task Delete(int ownerId);
     }
 }

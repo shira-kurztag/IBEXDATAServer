@@ -162,9 +162,7 @@ namespace Service
                                     NumberPhone = t.NumberPhone,
                                     NumberPhone2 = t.NumberPhone2
                                 };
-                             
-
-                              int id = await _IPowerOfAttorneysDB.AddPower(power);
+                                int id = await _IPowerOfAttorneysDB.AddPower(power);
                                 tenant.PowerOfAttorneyId = id.ToString();
                             }
 
@@ -229,7 +227,7 @@ namespace Service
                 {
                     var newOwner = _mapper.Map<OwnerTenant>(tenant);
                     var newTenant = _mapper.Map<Tenant>(tenant);
-                   
+
 
                     if (newTenant.IsSignatureByPowerOfAttorney == true)
                     {
@@ -237,7 +235,8 @@ namespace Service
                         string str = newPower.PowerOfAttorneyId;
                         Console.WriteLine(str + "str"); // התוצאה: 123
 
-                        if (int.TryParse(str, out int num)) { 
+                        if (int.TryParse(str, out int num))
+                        {
                             newPower.Id = num;
                             await _IPowerOfAttorneysDB.UpdatePower(newPower);
                         }
@@ -260,19 +259,19 @@ namespace Service
             }
         }
         ///שליפת דיירים לפי דירה
-        public async Task <List<TenantDTO2>> GetTenantByApartment(int apartment)
+        public async Task<List<TenantDTO2>> GetTenantByApartment(int apartment)
         {
-           int Apartment= await _IApartmentDB.GetTenantsApartment(apartment);
+            int Apartment = await _IApartmentDB.GetTenantsApartment(apartment);
             var owner = await _IOwnerDB.getOwnerByApartmen(Apartment);
             if (owner == null)
             {
                 throw new InvalidOperationException("Owner not found for the given ApartmentID.");
             }
             var ownerTenants = await _IOwnerTenantDB.GetOwnerTenantByOwnerId(owner.OwnerId);
-            List <TenantDTO2> l= new List<TenantDTO2>();
+            List<TenantDTO2> l = new List<TenantDTO2>();
             foreach (var ownerTenant1 in ownerTenants)
             {
-                var tenant =await _tenantDB.GetTenantById(ownerTenant1);
+                var tenant = await _tenantDB.GetTenantById(ownerTenant1);
                 if (tenant == null)
                 {
                     throw new InvalidOperationException("ownerTenant1 not found for the given tenantID.");
@@ -280,10 +279,10 @@ namespace Service
                 }
                 var OwnerTenants = await _tenantDB.GetPartAssetByOwnerTenants();
                 var curOwnerTenants = OwnerTenants.Find(x => x.TenantId == tenant.TenantId);
-                var PartAsset1=0;
+                var PartAsset1 = 0;
                 if (curOwnerTenants == null || curOwnerTenants.PartAsset == null)
                 {
-                    PartAsset1= 0;
+                    PartAsset1 = 0;
                     tenant.PartAsset = PartAsset1;
 
                 }
@@ -292,15 +291,15 @@ namespace Service
                     var PartAsset = curOwnerTenants.PartAsset.Value;
                     tenant.PartAsset = PartAsset;
                 }
-               
+
                 tenant.ApartmentId = Apartment;
                 //לא לשכוח 
                 // להביא את הנתונים של יפוי כוח
-                if(tenant.IsSignatureByPowerOfAttorney == true)
+                if (tenant.IsSignatureByPowerOfAttorney == true)
                 {
 
                     string str = tenant.PowerOfAttorneyId;
-                    Console.WriteLine(str+"str"); // התוצאה: 123
+                    Console.WriteLine(str + "str"); // התוצאה: 123
 
                     if (int.TryParse(str, out int num))
                     {
@@ -326,7 +325,7 @@ namespace Service
                     {
                         Console.WriteLine("The string is not a valid integer.");
                     }
-                    
+
 
                 }
                 //string idAsString = tenant.PowerOfAttorneyId;
@@ -339,45 +338,59 @@ namespace Service
                 //var p = await _IPowerOfAttorneysDB.GetPowerById(id);
 
                 l.Add(tenant);
-               
+
             }
             if (l == null || l.Count == 0)
             {
                 throw new InvalidOperationException("Tenant not found or PartAsset is null.");
             }
-            
+
             return l;
         }
 
         public async Task DeleteTenant(int tenantId)
         {
-            if(tenantId == 0 || tenantId == null)
+            if (tenantId == 0 || tenantId == null)
             {
                 throw new InvalidOperationException("Tenant not found.");
             }
             var OwnerTenants = await _IOwnerTenantDB.GetOwnerTenantBytenantId(tenantId);
-            if (OwnerTenants==null|| OwnerTenants.Count == 0)
+            if (OwnerTenants == null || OwnerTenants.Count == 0)
             {
                 throw new NotImplementedException();
 
             }
-            if(OwnerTenants.Count == 1)
+            if (OwnerTenants.Count == 1)
             {
-                ///Owner אם זה יש דייר אחד אז צריך למחוק גם מטבלה 
+               int OwnerId = OwnerTenants[0].OwnerId;
+                await _IOwnerDB.Delete(OwnerId);
             }
-            if (OwnerTenants.Count >= 2)
-            {
+           
                 await _IOwnerTenantDB.Delete(tenantId);
                 //למחוק את היפוי כוח 
+                var t = await _tenantDB.GetTenantById1(tenantId);
+                if (t == null)
+                {
+                    throw new InvalidOperationException("Tenant not found.");
+                }
+                if (t.IsSignatureByPowerOfAttorney)
+                {
+                    if (int.TryParse(t.PowerOfAttorneyId, out int num))
+                    {
+                        Console.WriteLine(num);
+                        await _IPowerOfAttorneysDB.Delete(num);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Invalid PowerOfAttorneyId: {t.PowerOfAttorneyId}");
+                    }
 
-                await _tenantDB.Delete(tenantId);
+                    await _tenantDB.Delete(tenantId);
+
+                }
+      
+
             }
-            //if (OwnerTenants== 1)
-            //{
-
-            //}
-
-            throw new NotImplementedException();
-        }
+        
     }
 }

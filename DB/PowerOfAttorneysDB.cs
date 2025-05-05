@@ -27,8 +27,19 @@ namespace DB
 
         }
 
-        
-         public async Task<PowerOfAttorney> GetPowerById(int powerId)
+        public async Task Delete(int PowerOfAttorneyId)
+        {
+            var power = await _context.PowerOfAttorneys
+                                      .FirstOrDefaultAsync(p => p.Id == PowerOfAttorneyId);
+
+            if (power != null) { 
+                 _context.PowerOfAttorneys.Remove(power);
+                 await _context.SaveChangesAsync();
+            }
+        }
+
+
+        public async Task<PowerOfAttorney> GetPowerById(int powerId)
          {
              return await _context.PowerOfAttorneys.FirstOrDefaultAsync(p => p.Id == powerId);
          }

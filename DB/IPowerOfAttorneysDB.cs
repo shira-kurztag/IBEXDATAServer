@@ -13,7 +13,8 @@ namespace DB
 
         Task UpdatePower(PowerOfAttorney Power);
         Task<PowerOfAttorney> GetPowerById(int PowerId);
-       
-           
+        Task Delete(int PowerId);
+
+
     }
 }
