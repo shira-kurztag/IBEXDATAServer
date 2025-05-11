@@ -88,5 +88,55 @@ namespace DB
             await _context.SaveChangesAsync();
 
         }
+
+ 
+        public async Task UpdateOwner(OwnerDTO2 owner)
+        {
+            if (owner == null)
+            {
+                throw new ArgumentNullException(nameof(owner), "Owner cannot be null");
+            }
+            var existingOwner = await _context.Owners.FindAsync(owner.OwnerId);
+            if (existingOwner == null)
+            {
+                throw new InvalidOperationException("Owner not found.");
+            }
+            existingOwner.PurchaseDate = owner.PurchaseDate;
+            existingOwner.AddressAccordingToContract = owner.AddressAccordingToContract;
+            existingOwner.MailingAddress = owner.MailingAddress;
+            existingOwner.SecondAddress = owner.SecondAddress;
+            existingOwner.DescriptionPhone1 = owner.DescriptionPhone1;
+            existingOwner.DescriptionPhone2 = owner.DescriptionPhone2;
+            existingOwner.DescriptionPhone3 = owner.DescriptionPhone3;
+            existingOwner.NumberStringPhone1 = owner.NumberStringPhone1;
+            existingOwner.NumberStringPhone2 = owner.NumberStringPhone2;
+            existingOwner.NumberStringPhone3 = owner.NumberStringPhone3;
+            existingOwner.Fax = owner.Fax;
+            existingOwner.Email = owner.Email;
+            existingOwner.LawyerName = owner.LawyerName;
+            existingOwner.DeadlineForReporting = owner.DeadlineForReporting;
+            existingOwner.IsReported = owner.IsReported;
+            existingOwner.IsConfirmationReporting = owner.IsConfirmationReporting;
+            existingOwner.ReporteFile = owner.ReporteFile;
+            existingOwner.IsCorrectLackPurchaseTaxBalance = owner.IsCorrectLackPurchaseTaxBalance;
+            existingOwner.IncumbentNumber = owner.IncumbentNumber;
+            existingOwner.HavePowerOfAttorney = owner.HavePowerOfAttorney;
+            existingOwner.IsCorrectPowerOfAttorney = owner.IsCorrectPowerOfAttorney;
+            existingOwner.IsGivenVouchers = owner.IsGivenVouchers;
+            existingOwner.IsLegalExpensesPaid = owner.IsLegalExpensesPaid;
+            existingOwner.PaidNote = owner.PaidNote;
+            existingOwner.IsSignedTofesHearot = owner.IsSignedTofesHearot;
+            existingOwner.IsProducedHachira = owner.IsProducedHachira;
+            existingOwner.IsFormSignedIrrevocableInstructions = owner.IsFormSignedIrrevocableInstructions;
+            existingOwner.SignedIrrevocableInstructionsFile = owner.SignedIrrevocableInstructionsFile;
+            existingOwner.IsFurthermoreLackOfApproval = owner.IsFurthermoreLackOfApproval;
+            existingOwner.LeaseNumberString = owner.LeaseNumberString;
+
+
+            await _context.SaveChangesAsync();
+        }
+
+     
     }
 }
+

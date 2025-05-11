@@ -8,5 +8,7 @@ namespace DB
         Task CreateContractor(ContractorDTO2 contractor);
         Task<List<Contractor>> GetAllContractors();
         Task UpdateContractor(ContractorDTO2 contractor);
+        Task <string?> NameContractorByProject(int apartmentId);
+
     }
 }

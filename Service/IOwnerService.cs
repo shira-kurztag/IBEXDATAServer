@@ -1,14 +1,21 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
+using IBEXDATA.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Service
 {
     public interface IOwnerService
     {
         Task<IEnumerable<Owner>> Get();
+        Task<OwnerDTO2> GetOwnerByApartmentId(int apartmentId);
+        Task UpdateOwner(OwnerDTO2 owner);
+
+
+
     }
 }

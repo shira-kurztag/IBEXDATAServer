@@ -38,9 +38,28 @@ namespace DB
             return await _dbContext.Contractors.ToListAsync();
         }
 
+        public async Task<string?> NameContractorByProject(int apartmentId)
+        {
+            if (apartmentId <= 0)
+            {
+                throw new ArgumentException("Invalid apartment ID.");
+            }
 
+            var contractorName = await (from apartment in _dbContext.Apartments
+                                        join building in _dbContext.Buildings
+                                            on apartment.BuildingId equals building.BuildingId
+                                        join project in _dbContext.Projects
+                                            on building.ProjectId equals project.ProjectId
+                                        join contractor in _dbContext.Contractors
+                                            on project.ContractingCompanyId equals contractor.ContractorId
+                                        where apartment.ApartmentId == apartmentId
+                                        select contractor.ContractorName)
+                                        .FirstOrDefaultAsync();
 
+           
 
+            return contractorName;
+        }
 
         public async Task UpdateContractor(ContractorDTO2 contractor)
         {
@@ -84,3 +103,4 @@ namespace DB
 
     }
 }
+

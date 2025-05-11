@@ -1,4 +1,5 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
+using IBEXDATA.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -68,6 +69,34 @@ namespace DB
 
             }
             return apartment.ApartmentId;
+        }
+
+        public async Task<Apartment> GetApartmentById(int apartmentId)
+        {
+            var apartment = await _context.Apartments.FirstOrDefaultAsync(a => a.ApartmentId == apartmentId);
+            if (apartment == null)
+            {
+                throw new InvalidOperationException("Apartment not found for the given ApartmentID.");
+            }
+            return apartment;
+        }
+
+        public async Task UpdateApartmenByOwner(OwnerDTO2 owner)
+        {
+
+            if (owner == null)
+            {
+                throw new ArgumentNullException(nameof(owner), "Owner cannot be null");
+            }
+            var existingOwnerApartments = await _context.Apartments.FirstAsync(a=>a.ApartmentId==owner.ApartmentId);
+            if (existingOwnerApartments == null)
+            {
+                throw new InvalidOperationException("Owner not found.");
+            }
+            //existingOwnerApartments.AddressByContract = owner.AddressByContract;
+            //existingOwnerApartments.PurchasDate = owner.PurchasDate;
+            await _context.SaveChangesAsync();
+          
         }
     }
 }

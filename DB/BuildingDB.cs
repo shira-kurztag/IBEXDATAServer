@@ -22,8 +22,33 @@ namespace DB
             return await _context.Buildings.Where(x=> x.ProjectId == projectId).ToListAsync();
         }
 
+        public async Task<string?> GetPurchaseDateByApartmentId(int apartmentId)
+        {
+            _logger.Information($"Fetching purchase date for apartment ID: {apartmentId}");
 
-        //.Where(b => b.ProjectId == projectId)
-        //    .Select(b => b.BuildingNumber)
+            if (apartmentId <= 0)
+            {
+                throw new ArgumentException("Invalid apartment ID.");
+            }
+
+            var apartment = await _context.Apartments.FirstOrDefaultAsync(x => x.ApartmentId == apartmentId);
+            if (apartment == null)
+            {
+                throw new ApplicationException($"No apartment found with ID: {apartmentId}");
+            }
+
+            var building = await _context.Buildings.FirstOrDefaultAsync(x => x.BuildingId == apartment.BuildingId);
+            if (building == null)
+            {
+                throw new ApplicationException($"No building found for apartment ID: {apartmentId}");
+            }
+
+            return building.AddressAndNumberOfMunicipal;
+        }
+
+
+        
+
+
     }
 }

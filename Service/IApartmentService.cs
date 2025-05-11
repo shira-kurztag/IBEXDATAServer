@@ -1,4 +1,5 @@
 ﻿
+using Common.DTO;
 using IBEXDATA.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace Service
         IEnumerable<Parking> GetParkingByBuilding(int buildingId);
         IEnumerable<LinkageCode> GetLinkagCode();
         Task<double> GetPartAssetApartmenID(int ApartmenID);
+        
 
     }
 }

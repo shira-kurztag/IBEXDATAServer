@@ -28,6 +28,8 @@ namespace Application
 
             CreateMap<TenantDTO, Tenant>().ReverseMap();
             CreateMap<TenantDTO2, Tenant>().ReverseMap();
+            CreateMap<Owner, OwnerDTO2>().ReverseMap();
+            CreateMap<Apartment, OwnerDTO2>().ReverseMap();
 
             CreateMap<Owner, OwnerDTO>().ReverseMap();
             CreateMap<OwnerTenant, TenantDTO2>().ReverseMap();

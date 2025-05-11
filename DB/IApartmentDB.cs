@@ -1,4 +1,5 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
+using IBEXDATA.Models;
 
 namespace DB
 {
@@ -10,6 +11,7 @@ namespace DB
         IEnumerable<Warehouse> GetWarehouseByBuilding(int buildingId);
         Task<List<OwnerTenant>> GetPartAsset(int ApartmentID);
         Task<int> GetTenantsApartment(int ApartmentID);
-
+        Task<Apartment> GetApartmentById(int apartmentId);
+        Task UpdateApartmenByOwner(OwnerDTO2 owner);
     }
 }

@@ -1,4 +1,5 @@
-﻿using DB;
+﻿using Common.DTO;
+using DB;
 using IBEXDATA.Models;
 using Serilog;
 using System;
@@ -59,5 +60,9 @@ namespace Service
             return curPartAsset;
         }
 
+        public Task UpdateApartmenByOwner(OwnerDTO2 owner)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
