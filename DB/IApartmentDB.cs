@@ -12,6 +12,6 @@ namespace DB
         Task<List<OwnerTenant>> GetPartAsset(int ApartmentID);
         Task<int> GetTenantsApartment(int ApartmentID);
         Task<Apartment> GetApartmentById(int apartmentId);
-        Task UpdateApartmenByOwner(OwnerDTO2 owner);
+       
     }
 }

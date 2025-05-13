@@ -81,22 +81,6 @@ namespace DB
             return apartment;
         }
 
-        public async Task UpdateApartmenByOwner(OwnerDTO2 owner)
-        {
-
-            if (owner == null)
-            {
-                throw new ArgumentNullException(nameof(owner), "Owner cannot be null");
-            }
-            var existingOwnerApartments = await _context.Apartments.FirstAsync(a=>a.ApartmentId==owner.ApartmentId);
-            if (existingOwnerApartments == null)
-            {
-                throw new InvalidOperationException("Owner not found.");
-            }
-            //existingOwnerApartments.AddressByContract = owner.AddressByContract;
-            //existingOwnerApartments.PurchasDate = owner.PurchasDate;
-            await _context.SaveChangesAsync();
-          
-        }
+        
     }
 }

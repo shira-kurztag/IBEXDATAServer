@@ -87,9 +87,8 @@ namespace Application.Controllers
             {
                 return BadRequest("Invalid ApartmentId ID.");
             }
-            // שליפת בעל הדירה
-            //await _OwnerService.GetOwnerByApartmentId(ApartmentId);
-
+          
+            await _OwnerService.UpdateOwner(Owner);
 
             // במקרה של הצלחה, מחזירים את המידע על בעל הדירה
             try

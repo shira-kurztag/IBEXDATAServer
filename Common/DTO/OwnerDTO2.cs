@@ -53,9 +53,11 @@ namespace Common.DTO
         public bool IsConfirmationReporting { get; set; }//   האם דווח אישור
 
         public string? ReporteFile { get; set; }//   קובץ דיווח
+
+  
         public bool IsCorrectLackPurchaseTaxBalance { get; set; }//אישור היעדר יתרה במס רכישה במסגרת הרכישה: 
 
-
+        public string? ReportedApproved { get; set; }
         public string? IncumbentNumber { get; set; }//   מספר מחזיק
         //
 
@@ -72,19 +74,21 @@ namespace Common.DTO
         //
 
         //``
-        public bool? IsSignedTofesHearot { get; set; }   ///האם נחתם טופס הוראות בלתי חוזרות במעמד החתימה? 
-        //
-        //``
+        public bool? IsSignedTofesHearot { get; set; } /// האם נחתם טופס הוראות בלתי חוזרות במעמד החתימה? 
+                                                       
+
+      
         public bool? IsProducedHachira { get; set; }  ///האם הופקה חחירה במעמד החתימה?
         //
-        public bool IsFormSignedIrrevocableInstructions { get; set; }//   האם טופס הוראות בלתי חוזרות נחתם
+        public bool IsFormSignedIrrevocableInstructions { get; set; }//האם  היעדר יתרה במס רכישה במסגרת הרכישה: 
+        
         //```
-        public string? SignedIrrevocableInstructionsFile { get; set; }//   קובץ טופס הוראות בלתי חוזרות
-        //
-       
+        public string? SignedIrrevocableInstructionsFile { get; set; }//   אישור היעדר יתרה במס רכישה במסגרת הרכישה: 
+                                                                      //
+
         public bool IsFurthermoreLackOfApproval { get; set; }//האם התקבל אישור על הצהרת הדיווח
 
-        public string? LeaseNumberString { get; set; } //מספר חוזה שכירות
+        public string? LeaseNumberString { get; set; } //מספר חוזה חכירה
 
 
     }

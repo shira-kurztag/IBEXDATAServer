@@ -111,28 +111,60 @@ namespace DB
             existingOwner.NumberStringPhone1 = owner.NumberStringPhone1;
             existingOwner.NumberStringPhone2 = owner.NumberStringPhone2;
             existingOwner.NumberStringPhone3 = owner.NumberStringPhone3;
+            if (int.TryParse(owner.NumberStringPhone1, out int num1))
+            {
+                existingOwner.NumberPhone1 = num1;
+            }
+            if (int.TryParse(owner.NumberStringPhone2, out int num2))
+            {
+                existingOwner.NumberPhone2 = num2;
+            }
+            if (int.TryParse(owner.NumberStringPhone3, out int num3))
+            {
+                existingOwner.NumberPhone3 = num3;
+            }
             existingOwner.Fax = owner.Fax;
             existingOwner.Email = owner.Email;
             existingOwner.LawyerName = owner.LawyerName;
             existingOwner.DeadlineForReporting = owner.DeadlineForReporting;
             existingOwner.IsReported = owner.IsReported;
-            existingOwner.IsConfirmationReporting = owner.IsConfirmationReporting;
-            existingOwner.ReporteFile = owner.ReporteFile;
+            if(owner.IsReported)
+            {
+                existingOwner.IsConfirmationReporting = owner.IsConfirmationReporting;
+                existingOwner.ReporteFile = owner.ReporteFile;
+                existingOwner.IncumbentNumber = owner.IncumbentNumber;
+            }
+
+
+
             existingOwner.IsCorrectLackPurchaseTaxBalance = owner.IsCorrectLackPurchaseTaxBalance;
-            existingOwner.IncumbentNumber = owner.IncumbentNumber;
             existingOwner.HavePowerOfAttorney = owner.HavePowerOfAttorney;
-            existingOwner.IsCorrectPowerOfAttorney = owner.IsCorrectPowerOfAttorney;
+            if(owner.HavePowerOfAttorney)
+            {
+                existingOwner.PowerOfAttorneyFile = owner.PowerOfAttorneyFile;
+                existingOwner.IsCorrectPowerOfAttorney = owner.IsCorrectPowerOfAttorney;
+            }
+        
             existingOwner.IsGivenVouchers = owner.IsGivenVouchers;
             existingOwner.IsLegalExpensesPaid = owner.IsLegalExpensesPaid;
+
             existingOwner.PaidNote = owner.PaidNote;
+
             existingOwner.IsSignedTofesHearot = owner.IsSignedTofesHearot;
+            if (owner.IsSignedTofesHearot==true)
+            {
+               //// חסר לי את הטופס של הוראות בלתי חוזרות
+            }
             existingOwner.IsProducedHachira = owner.IsProducedHachira;
             existingOwner.IsFormSignedIrrevocableInstructions = owner.IsFormSignedIrrevocableInstructions;
-            existingOwner.SignedIrrevocableInstructionsFile = owner.SignedIrrevocableInstructionsFile;
+            if (owner.IsFormSignedIrrevocableInstructions)
+            {
+                existingOwner.SignedIrrevocableInstructionsFile = owner.SignedIrrevocableInstructionsFile;
+
+            }
+            
             existingOwner.IsFurthermoreLackOfApproval = owner.IsFurthermoreLackOfApproval;
             existingOwner.LeaseNumberString = owner.LeaseNumberString;
-
-
             await _context.SaveChangesAsync();
         }
 

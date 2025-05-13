@@ -83,8 +83,9 @@ namespace Service
             {
                 throw new ArgumentException("Owner ID cannot be null");
             }
+
             await _OwnerDB.UpdateOwner(owner);
-            await _ApartmentDB.UpdateApartmenByOwner(owner);
+      
 
           
 
