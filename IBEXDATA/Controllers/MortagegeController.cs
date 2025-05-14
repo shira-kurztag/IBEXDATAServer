@@ -39,17 +39,17 @@ namespace Application.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCurrencyTypes()
         {
-           
-              var CurrencyTypes= await _mortagegeService.GetAllCurrencyTypes();
-                return Ok(CurrencyTypes);
+
+            var CurrencyTypes = await _mortagegeService.GetAllCurrencyTypes();
+            return Ok(CurrencyTypes);
         }
         [Route("GetAllMortagegeLevels")]
         [HttpGet]
         public async Task<IActionResult> GetAllMortagegeLevels()
-        { 
-            var MortagegeLevels= await _mortagegeService.GetAllMortagegeLevels();
+        {
+            var MortagegeLevels = await _mortagegeService.GetAllMortagegeLevels();
             return Ok(MortagegeLevels);
-               
+
 
         }
         [Route("SaveFullMortagege/{mortagegeId}")]
@@ -104,5 +104,57 @@ namespace Application.Controllers
             var TypeMessages = await _mortagegeService.GetAllTypeMessages();
             return Ok(TypeMessages);
         }
+
+
+        [HttpGet("HasMortgageInProcess/{apartmentId}")]
+        public async Task<IActionResult> HasMortgageInProcess(int apartmentId)
+        {
+            try
+            {
+                bool hasMortgageInProcess = await _mortagegeService.HasMortgageInProcess(apartmentId);
+                return Ok(new { ApartmentId = apartmentId, HasMortgageInProcess = hasMortgageInProcess });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while checking the mortgage.", Details = ex.Message });
+            }
+        }
+        [HttpPost("createBankCertificate")]
+        public async Task<long> createBankCertificate(BankCertificate bankCertificate)
+        {
+
+            var bankCertificateId = await _mortagegeService.createBankCertificate(bankCertificate);
+            return bankCertificateId;
+        }
+        [Route("UpdateBankCertificates/{mortgageId}/{listIdOwnerOfmort}")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateBankCertificates(int mortgageId,int[] listIdOwnerOfmort,[FromBody] List<BankCertificate> bankCertificates)
+          {             
+            try
+            {
+                await _mortagegeService.UpdateBankCertificates(mortgageId, listIdOwnerOfmort, bankCertificates);
+                return Ok(new { message = "success" });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet("GetAllMortgageBanksByApartment/{apartmentId}")]
+        public async Task<IActionResult> GetAllMortgageBanksByApartment(int apartmentId)
+        {
+            try
+            {
+                var banks = await _mortagegeService.GetAllMortgageBanksByApartment(apartmentId);
+                return Ok(banks);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
-    }
+}

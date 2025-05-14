@@ -10,5 +10,6 @@ namespace Service
         IEnumerable<Bank> GetBanks();
         Task<IEnumerable<Bank>> GetNames();
         Task<Bank> Update(int id, Bank bank);
+        Task<Bank> GetBankById(int Id);
     }
 }

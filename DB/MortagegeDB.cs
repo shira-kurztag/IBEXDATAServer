@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using IBEXDATA.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,8 +57,8 @@ namespace DB
             return await _dbContext.MortagegeLevels.ToListAsync();
 
         }
-  
-        public async Task SaveFullMortgage(Mortagege mortgage, List<MortgageToTeanant > mortgageToTenants)
+
+        public async Task SaveFullMortgage(Mortagege mortgage, List<MortgageToTeanant> mortgageToTenants)
         {
             using (var transaction = await _dbContext.Database.BeginTransactionAsync())
             {
@@ -104,7 +106,89 @@ namespace DB
         {
             await _dbContext.Mortageges.AddAsync(mortagege);
             await _dbContext.SaveChangesAsync();
-            return  mortagege.MortagegeId;
+            return mortagege.MortagegeId;
+        }
+
+        public async Task<bool> HasMortgageInProcess(int apartmentId)
+        {
+            return await _dbContext.Mortageges
+                .Join(_dbContext.MortgageToTeanants,
+                      mortgage => mortgage.MortagegeId,
+                      mortgageToTenant => mortgageToTenant.MortgageId, 
+                      (mortgage, mortgageToTenant) => new { mortgage, mortgageToTenant })
+                .Join(_dbContext.Tenants,
+                      combined => combined.mortgageToTenant.TeanantId, 
+                      tenant => tenant.TenantId,
+                      (combined, tenant) => new { combined.mortgage, tenant })
+                .Join(_dbContext.OwnerTenants,
+                      combined => combined.tenant.TenantId,
+                      ownerTenant => ownerTenant.TenantId,
+                      (combined, ownerTenant) => new { combined.mortgage, ownerTenant })
+                .Join(_dbContext.Owners,
+                      combined => combined.ownerTenant.OwnerId,
+                      owner => owner.OwnerId,
+                      (combined, owner) => new { combined.mortgage, owner })
+                .Join(_dbContext.Apartments,
+                      combined => combined.owner.ApartmentId,
+                      apartment => apartment.ApartmentId,
+                      (combined, apartment) => new { combined.mortgage, apartment })
+                .AnyAsync(result => result.apartment.ApartmentId == apartmentId &&
+                                    result.mortgage.MortagegeStatus == 1);
+        }
+        public async Task<long> createBankCertificate(BankCertificate bankCertificate)
+        {
+            await _dbContext.BankCertificates.AddAsync(bankCertificate);
+            await _dbContext.SaveChangesAsync();
+            return bankCertificate.BankCertificatesId;
+
+        }
+
+
+
+        public async Task UpdateBankCertificate(BankCertificate bankCertificate)
+        {
+          
+            var existingCertificate = await _dbContext.BankCertificates.FindAsync(bankCertificate.BankCertificatesId);
+            if (existingCertificate != null)
+            {
+              
+                _dbContext.Entry(existingCertificate).CurrentValues.SetValues(bankCertificate);
+
+              
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("BankCertificate not found in the database.");
+            }
+        }
+
+
+
+
+        public async Task<List<int>> GetAllMortgageBanksByApartment(int apartmentId)
+        {
+            return await _dbContext.Mortageges
+                .Join(_dbContext.MortgageToTeanants,
+                      mortgage => mortgage.MortagegeId,
+                      mortgageToTenant => mortgageToTenant.MortgageId,
+                      (mortgage, mortgageToTenant) => new { mortgage, mortgageToTenant })
+                .Join(_dbContext.Tenants,
+                      combined => combined.mortgageToTenant.TeanantId,
+                      tenant => tenant.TenantId,
+                      (combined, tenant) => new { combined.mortgage, tenant })
+                .Join(_dbContext.OwnerTenants,
+                      combined => combined.tenant.TenantId,
+                      ownerTenant => ownerTenant.TenantId,
+                      (combined, ownerTenant) => new { combined.mortgage, ownerTenant })
+                .Join(_dbContext.Owners,
+                      combined => combined.ownerTenant.OwnerId,
+                      owner => owner.OwnerId,
+                      (combined, owner) => new { combined.mortgage, owner })
+                .Where(result => result.owner.ApartmentId == apartmentId && result.mortgage.ToTheBank.HasValue)
+                .Select(result => result.mortgage.ToTheBank.Value)
+                .Distinct()
+                .ToListAsync();
         }
     }
 }

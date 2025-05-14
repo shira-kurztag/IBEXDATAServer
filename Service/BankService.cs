@@ -47,5 +47,13 @@ namespace Service
         {
             return _BankDB.AddBank(newBank);
         }
+
+        public async Task<Bank> GetBankById(int Id)
+        {
+            var banks =await _BankDB.Get();
+            return banks.First(x => x.BankId == Id);
+        }
+     
+
     }
 }

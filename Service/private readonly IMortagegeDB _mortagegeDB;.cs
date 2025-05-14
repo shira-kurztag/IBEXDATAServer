@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using Common;
 using IBEXDATA.Models;
+using AutoMapper;
+using Common.DTO;
 
 namespace Service
 {
@@ -15,11 +17,13 @@ namespace Service
         IOwnerDB _OwnerDB;
         private readonly IOwnerTenantService _ownerTenantService;
         private readonly IOwnerTenantDB _ownerTenantDB;
-        public OwnerService(IOwnerDB OwnerDB, IOwnerTenantService ownerTenantService,IOwnerTenantDB ownerTenantDB)
+       private readonly IMapper _mapper;
+        public OwnerService(IOwnerDB OwnerDB, IOwnerTenantService ownerTenantService,IOwnerTenantDB ownerTenantDB, IMapper mapper)
         {
             _OwnerDB = OwnerDB;
             _ownerTenantService = ownerTenantService;
             _ownerTenantDB = ownerTenantDB;
+            _mapper = mapper;
         }   
 
 
@@ -57,16 +61,37 @@ namespace Service
                 .ToList();
 
         }
-        public async Task<List<Owner>> GetAllOwnersByTenants(List<int> tenants)
+        //public async Task<List<SimpleOwnerDTO>> GetAllOwnersByTenants(List<int> tenants)
+        //{
+        //    var allOwnersTenants = await _ownerTenantDB.GetOwnersTeants();
+        //    var ownerIds = allOwnersTenants
+        //   .Where(o => tenants.Any(ot => ot == o.TenantId))
+        //   .Select(o => o.OwnerId)
+        //   .Distinct()
+        //   .ToList();
+        //    var owners = await GetOwnersByIds(ownerIds);
+        //    var simpleOwner = _mapper.Map<SimpleOwnerDTO>(Owner);
+
+        //    return simpleOwner;
+        //}
+
+
+        public async Task<List<SimpleOwnerDTO>> GetAllOwnersByTenants(List<int> tenants)
         {
             var allOwnersTenants = await _ownerTenantDB.GetOwnersTeants();
+
             var ownerIds = allOwnersTenants
-           .Where(o => tenants.Any(ot => ot == o.TenantId))
-           .Select(o => o.OwnerId)
-           .Distinct()
-           .ToList();
+                .Where(o => tenants.Contains(o.TenantId))
+                .Select(o => o.OwnerId)
+                .Distinct()
+                .ToList();
+
             var owners = await GetOwnersByIds(ownerIds);
-            return owners;
+
+            // Assuming owners is a List<Owner>
+            var simpleOwners = _mapper.Map<List<SimpleOwnerDTO>>(owners);
+
+            return simpleOwners;
         }
     }
 }

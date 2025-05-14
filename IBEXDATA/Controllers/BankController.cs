@@ -138,5 +138,20 @@ namespace Application.Controllers
         //   // var bankDTO = _mapper.Map<Contractor, ContractorDTO>(bank);
         //    return Ok(bank);
         //}
+
+   
+        [HttpGet("GetBankById/{bankId}")]
+        public async Task<IActionResult> GetBankById(int bankId) 
+        {        
+            var bank = await _BankService.GetBankById(bankId);
+            if (bank == null)
+            {
+                return BadRequest("Bank not found");
+            }
+            return Ok(bank);
+        }
+     
+
+
     }
 }

@@ -30,9 +30,7 @@ namespace Application.Controllers
             var owners = await _OwnerService.Get();
             if (owners != null)
             {
-               // var ownerDTOs = _mapper.Map<List<Owner>, List<OwnerDTO>>(owners.ToList());
-               // _logger.LogInformation("Successfully retrieved all owners.");
-                return Ok(owners);
+                           return Ok(owners);
             }
 
             _logger.LogWarning("Failed to retrieve owners.");
@@ -40,6 +38,7 @@ namespace Application.Controllers
         }
 
         [HttpGet("GetOwnersByApartmentId/{apartmentId}")]
+
         public async Task<IActionResult> GetOwnersByApartmentId(int apartmentId)
         {
             try
@@ -50,29 +49,25 @@ namespace Application.Controllers
                     return NotFound();
                 }
 
-                // הוספת לוגים כדי לוודא שהנתונים הם מה שציפית
-                Console.WriteLine("Sending owners to Swagger: " + owners.Count);
-                owners.ForEach(owner => Console.WriteLine(owner.ToString()));
-
-                return Ok(owners);
+        
+                var simpleTeants = _mapper.Map<List<TenantWithIdDTO>>(owners);
+                return Ok(simpleTeants) ;
             }
             catch (ApplicationException ex)
             {
-                // Log the exception (e.g., using a logging framework)
-                Console.WriteLine("ApplicationException: " + ex.Message);
+
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
             catch (Exception ex)
             {
-                // Log the exception (e.g., using a logging framework)
-                Console.WriteLine("Exception: " + ex.Message);
+
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
             }
         }
 
       
         [HttpPost("GetAllOwnersByTenants")]
-        public async Task<IActionResult> GetAllOwnersByTenants([FromBody] List<int> tenants)
+        public async Task<ActionResult<List<SimpleOwnerDTO>>> GetAllOwnersByTenants([FromBody] List<int> tenants)
         {
             var result = await _OwnerService.GetAllOwnersByTenants(tenants);
             return Ok(result);

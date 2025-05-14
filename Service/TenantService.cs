@@ -51,7 +51,6 @@ namespace Service
 
             return curOwnerTenants.PartAsset.Value;
         }
-
         public async Task AddTenants(List<TenantDTO> tenants)
         {
             foreach (var t in tenants)

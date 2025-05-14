@@ -1,4 +1,5 @@
-﻿using IBEXDATA.Models;
+﻿using Common.DTO;
+using IBEXDATA.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,8 @@ namespace Service
 
 
         Task<List<Owner>> GetOwnersByIds(List<int> ownersIds);
-        Task<List<Owner>> GetAllOwnersByTenants(List<int> tenants);
+        Task<List<SimpleOwnerDTO>> GetAllOwnersByTenants(List<int> tenants);
+    
 
     }
 }

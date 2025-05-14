@@ -106,11 +106,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-//builder.Services.AddControllers();
 
-builder.Services.AddControllers().AddJsonOptions(x =>
-    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); // הוספת ReferenceHandler
 
+//builder.Services.AddControllers().AddJsonOptions(x =>/////??++
+//    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); // הוספת ReferenceHandler
+
+
+builder.Services.AddControllers();
+   
 // Add authentication services
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

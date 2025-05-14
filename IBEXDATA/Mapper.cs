@@ -10,6 +10,7 @@ namespace Application
     {
         public Mapper()
         {
+            CreateMap<SimpleOwnerDTO, Owner>().ReverseMap();
             CreateMap<AdminApprovalDTO, AdminApproval>().ReverseMap();
             CreateMap<AdminApprovalDTO, AdminApproval>()
          .ForMember(dest => dest.ReciverId, opt => opt.Ignore());
@@ -29,7 +30,7 @@ namespace Application
             CreateMap<Mortagege, MortagegeDTO>().ReverseMap();
 
             CreateMap<TenantDTO, Tenant>().ReverseMap();
-
+            CreateMap<TenantWithIdDTO, Tenant>().ReverseMap();
         }
     }
 }

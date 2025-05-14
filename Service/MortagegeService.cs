@@ -72,5 +72,28 @@ namespace Service
 
             return await _mortagegeDB.GetAllTypeMessages();
         }
+
+   
+        public async Task<bool> HasMortgageInProcess(int apartmentId)
+        {
+            return await _mortagegeDB.HasMortgageInProcess(apartmentId);
+        }
+
+        public async Task<long> createBankCertificate(BankCertificate bankCertificate)
+        {
+            return await _mortagegeDB.createBankCertificate(bankCertificate);
+        }
+
+        public async Task UpdateBankCertificates(int mortgageId, int[] listIdOwnerOfmort,  List<BankCertificate> bankCertificates)
+        {
+
+
+             await _mortagegeDB.UpdateBankCertificate(bankCertificate);
+        }
+
+        public async Task<List<int>> GetAllMortgageBanksByApartment(int apartmentId)
+        {
+            return await _mortagegeDB.GetAllMortgageBanksByApartment(apartmentId);
+        }
     }
 }
