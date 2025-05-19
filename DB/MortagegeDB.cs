@@ -162,11 +162,20 @@ namespace DB
                 throw new Exception("BankCertificate not found in the database.");
             }
         }
+   
 
 
-
-
-        public async Task<List<int>> GetAllMortgageBanksByApartment(int apartmentId)
+        public async Task<List<int>> GetAllIdMortgageByTeant(int tenantId)
+        {
+            
+                return await _dbContext.MortgageToTeanants
+                    .Where(m => m.TeanantId == tenantId)
+                    .Select(m => m.MortgageId) // הנחה שמזהה המשכנתא הוא `Id`
+                    .ToListAsync();
+            
+        }
+   
+            public async Task<List<int>> GetAllMortgageBanksByApartment(int apartmentId)
         {
             return await _dbContext.Mortageges
                 .Join(_dbContext.MortgageToTeanants,
@@ -190,5 +199,13 @@ namespace DB
                 .Distinct()
                 .ToListAsync();
         }
+        public async Task<Mortagege> GetMortgageById(int mortgageId)
+        {
+            var mortgage =  _dbContext.Mortageges.Where(m => m.MortagegeId == mortgageId).FirstOrDefault();
+                
+                           return mortgage;
+
+        }
+
     }
 }

@@ -18,5 +18,12 @@ namespace Service
         Task UpdateBankCertificates(int mortgageId, int[] listIdOwnerOfmort, List<BankCertificate> bankCertificates);
         Task<List<int>> GetAllMortgageBanksByApartment(int apartmentId);
 
+
+       Task<List<int>> GetAllIdMortgageByTeant(int tenantId);
+
+       Task<Mortagege> GetMortgageById(int mortgageId);
+
+
+     
     }
 }

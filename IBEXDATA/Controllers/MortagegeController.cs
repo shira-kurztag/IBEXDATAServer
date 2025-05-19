@@ -1,4 +1,5 @@
 ﻿using Common.DTO;
+using DB;
 using IBEXDATA.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -69,7 +70,6 @@ namespace Application.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (logging implementation is skipped here)
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the mortagege.");
             }
         }
@@ -126,21 +126,7 @@ namespace Application.Controllers
             var bankCertificateId = await _mortagegeService.createBankCertificate(bankCertificate);
             return bankCertificateId;
         }
-        [Route("UpdateBankCertificates/{mortgageId}/{listIdOwnerOfmort}")]
-        [HttpPut]
-        public async Task<IActionResult> UpdateBankCertificates(int mortgageId,int[] listIdOwnerOfmort,[FromBody] List<BankCertificate> bankCertificates)
-          {             
-            try
-            {
-                await _mortagegeService.UpdateBankCertificates(mortgageId, listIdOwnerOfmort, bankCertificates);
-                return Ok(new { message = "success" });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return BadRequest(ex.Message);
-            }
 
-        }
 
         [HttpGet("GetAllMortgageBanksByApartment/{apartmentId}")]
         public async Task<IActionResult> GetAllMortgageBanksByApartment(int apartmentId)
@@ -155,6 +141,34 @@ namespace Application.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("GetAllIdMortgageByTeant/{tenantId}")]
+        public async Task<IActionResult> GetAllIdMortgageByTeant(int tenantId)
+        {
 
+            try
+            {
+                var Mortgages = await _mortagegeService.GetAllIdMortgageByTeant(tenantId);
+                return Ok(Mortgages);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        [HttpGet("GetMortgageById/{mortgageId}")]
+        public async Task<IActionResult> GetMortgageById(int mortgageId)
+        {
+            try
+            {
+                var Mortgage = await _mortagegeService.GetMortgageById(mortgageId);
+                return Ok(Mortgage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }

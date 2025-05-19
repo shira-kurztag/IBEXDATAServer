@@ -21,7 +21,7 @@ namespace Common.DTO
 
         //public DateTime? DateUpdate { get; set; }
 
-        //public int? ObjectId { get; set; }
+       public int? ObjectId { get; set; }
 
         public int? MessageType { get; set; }//סוג הפעולה
 

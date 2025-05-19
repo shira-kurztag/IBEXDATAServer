@@ -15,5 +15,9 @@ namespace DB
         Task UpdateBankCertificate(BankCertificate bankCertificate);
 
         Task<List<int>> GetAllMortgageBanksByApartment(int apartmentId);
+
+        Task<List<int>> GetAllIdMortgageByTeant(int tenantId);
+
+         Task<Mortagege> GetMortgageById(int mortgageId);
     }
 }

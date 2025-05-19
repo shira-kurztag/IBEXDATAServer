@@ -63,9 +63,9 @@ namespace Service
         public async Task<int> CreateMortagege(MortagegeDTO mortagegeDTO)
         {
             var mortagege = _mapper.Map<Mortagege>(mortagegeDTO);
-         
-            
-          return  await _mortagegeDB.CreateMortagege(mortagege);
+
+            mortagege.DateCommitment = DateOnly.FromDateTime(DateTime.Now);
+            return await _mortagegeDB.CreateMortagege(mortagege);
         }
         public async Task<List<TypeMessage>> GetAllTypeMessages()
         {
@@ -73,7 +73,7 @@ namespace Service
             return await _mortagegeDB.GetAllTypeMessages();
         }
 
-   
+
         public async Task<bool> HasMortgageInProcess(int apartmentId)
         {
             return await _mortagegeDB.HasMortgageInProcess(apartmentId);
@@ -84,16 +84,29 @@ namespace Service
             return await _mortagegeDB.createBankCertificate(bankCertificate);
         }
 
-        public async Task UpdateBankCertificates(int mortgageId, int[] listIdOwnerOfmort,  List<BankCertificate> bankCertificates)
+        public async Task UpdateBankCertificates(int mortgageId, int[] listIdOwnerOfmort, List<BankCertificate> bankCertificates)
         {
 
 
-             await _mortagegeDB.UpdateBankCertificate(bankCertificate);
+            //await _mortagegeDB.UpdateBankCertificate(bankCertificate);
         }
 
         public async Task<List<int>> GetAllMortgageBanksByApartment(int apartmentId)
         {
             return await _mortagegeDB.GetAllMortgageBanksByApartment(apartmentId);
         }
+
+        public async Task<List<int>> GetAllIdMortgageByTeant(int tenantId)
+        {
+
+            return await _mortagegeDB.GetAllIdMortgageByTeant(tenantId);
+        }
+
+        public async Task<Mortagege> GetMortgageById(int mortgageId)
+        {
+            return await _mortagegeDB.GetMortgageById(mortgageId);
+        }
+
+
     }
-}
+    }
