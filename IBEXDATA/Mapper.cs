@@ -16,8 +16,8 @@ namespace Application
          .ForMember(dest => dest.ReciverId, opt => opt.Ignore());
             CreateMap<ProjectCreateDTO, Project>();
             CreateMap<Project, ProjectCreateDTO>();
+            CreateMap<Mortagege, simpleMortagegeDTO>().ReverseMap();
 
-         
             CreateMap<Project, ProjectDTO>();
 
        
