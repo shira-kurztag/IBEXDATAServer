@@ -1,5 +1,7 @@
 ﻿using Common.DTO;
+using IBEXDATA.Models;
 using Microsoft.AspNetCore.Mvc;
+using Service;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -7,19 +9,26 @@ namespace Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TabusController : ControllerBase
+    public class TabuController : ControllerBase
     {
+        private readonly ITabusService _tabusService;
+
+        public TabuController(ITabusService TabusService)
+        {
+            _tabusService = TabusService;
+        }
+
         // GET: api/<TabusController>
         [HttpGet("{OwnerId}")]
-        public async Task<Tabus> GetTabusByOwnerId (int OwnerId) // מספר
-
+        public async Task<IActionResult> GetTabusByOwnerId(int OwnerId)
         {
             try
             {
-                // קבל את הרשימה של הדיירים מהשירות
-                var Tabus = await _tenantService.GetTenantByApartment(OwnerId);
-                // החזר את הרשימה בתגובה
-                return Ok(Tabus);
+                // Fetch the list of tenants from the service
+                var tabu = await _tabusService.GetTabusByOwnerId(OwnerId);
+
+                // Return the list in the response
+                return Ok(tabu);
             }
             catch (InvalidOperationException ex)
             {

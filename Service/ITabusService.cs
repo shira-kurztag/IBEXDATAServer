@@ -9,6 +9,6 @@ namespace Service
 {
     public interface ITabusService
     {
-        Task<Tabus> GetTabusByOwnerId(int OwnerId);
+        Task<TabuDTO> GetTabusByOwnerId(int OwnerId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Common.DTO;
+using IBEXDATA.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace DB
 {
     public interface ITabusDB
     {
-        Task<Tabus> GetTabusByOwnerId(int OwnerId);
+        Task<Tabu> GetTabusByOwnerId(int OwnerId);
     }
 }

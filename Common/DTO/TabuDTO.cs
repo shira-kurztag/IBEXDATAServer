@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common.DTO
 {
-    public class Tabus
+    public class TabuDTO
     {
         public int TabuId { get; set; }
 
