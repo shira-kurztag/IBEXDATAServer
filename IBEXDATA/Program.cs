@@ -7,6 +7,8 @@ using Service;
 using Serilog;
 using Microsoft.OpenApi.Models;
 using Application.Controllers;
+using AutoMapper;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +86,8 @@ builder.Services.AddSwaggerGen(c =>
 
 //builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 
 builder.Services.AddDbContext<dbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
