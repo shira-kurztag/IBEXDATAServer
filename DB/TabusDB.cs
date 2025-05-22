@@ -34,5 +34,18 @@ namespace DB
             return tabu;
         }
 
+        public async Task UpdateTabu(TabuDTO tabu)
+        {
+            var tabu1 = await _context.Tabus
+                            .Where(t => t.OwnerId == tabu.OwnerId)
+                            .FirstOrDefaultAsync();
+            if(tabu1 == null)
+            {
+                throw new InvalidOperationException($"No Tabus found for the given OwnerId: {tabu.OwnerId}.");
+            }
+
+
+        }
+
     }
 }

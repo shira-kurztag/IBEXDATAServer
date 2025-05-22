@@ -11,5 +11,6 @@ namespace DB
     public interface ITabusDB
     {
         Task<Tabu> GetTabusByOwnerId(int OwnerId);
+        Task UpdateTabu(TabuDTO tabu);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Common.DTO;
+using DB;
 using IBEXDATA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
@@ -57,11 +58,33 @@ namespace Application.Controllers
         //{
         //}
 
-        //// PUT api/<TabusController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
+        // PUT api/<TabusController>/5
+        [HttpPut("{OwnerId}")]
+        public  async Task<IActionResult> Put(int OwnerId, [FromBody] TabuDTO tabu)
+        {
+            if (tabu == null )
+            {
+                return BadRequest("No tabu provided.");
+            }
+
+            try
+            {
+                await _tabusService.UpdateTabu(tabu);
+                return Ok(new { message = "Tabu Update successfully." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An unexpected error occurred. Please try again later." });
+            }
+        }
 
         //// DELETE api/<TabusController>/5
         //[HttpDelete("{id}")]

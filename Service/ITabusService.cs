@@ -10,5 +10,6 @@ namespace Service
     public interface ITabusService
     {
         Task<TabuDTO> GetTabusByOwnerId(int OwnerId);
+        Task UpdateTabu(TabuDTO tabu);
     }
 }

@@ -36,10 +36,20 @@ namespace Service
 
             return _mapper.Map<TabuDTO>(tabus);
 
+        }
 
+        public async Task UpdateTabu(TabuDTO tabu)
+        {
+            if(tabu == null)
+            {
+                throw new ArgumentNullException(nameof(tabu), "tabu cannot be null or empty");
 
-
-
+            }
+            if (tabu.ApartmentId == 0 || tabu.OwnerId == 0)
+            {
+                throw new ArgumentNullException(nameof(tabu), "tabu cannot be null or empty");
+            }
+            await _ITabusDB.UpdateTabu(tabu);
         }
     }
 }
