@@ -169,7 +169,17 @@ namespace DB
 
         }
 
-     
+        public async Task<Owner> GetOwnerById(int ownerId)
+        {
+            var owner = await _context.Owners
+                .FirstOrDefaultAsync(o => o.OwnerId == ownerId);
+            if (owner == null)
+            {
+                _logger.Warning("Owner with ID {OwnerId} not found.", ownerId);
+                throw new InvalidOperationException("Owner not found.");
+            }
+            return owner;
+        }
     }
 }
 

@@ -30,7 +30,7 @@ namespace Application
             CreateMap<TenantDTO2, Tenant>().ReverseMap();
             CreateMap<Owner, OwnerDTO2>().ReverseMap();
             CreateMap<Apartment, OwnerDTO2>().ReverseMap();
-
+            CreateMap<TabuDTO, Tabu>().ReverseMap();
             CreateMap<Owner, OwnerDTO>().ReverseMap();
             CreateMap<OwnerTenant, TenantDTO2>().ReverseMap();
             CreateMap<PowerOfAttorney, TenantDTO2>().ReverseMap();

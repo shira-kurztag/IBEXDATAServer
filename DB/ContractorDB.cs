@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using Common.DTO;
+﻿using Common.DTO;
 using IBEXDATA.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 
 namespace DB

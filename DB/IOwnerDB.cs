@@ -15,5 +15,6 @@ namespace DB
         Task<Owner> getOwnerByApartmen(int apartmenID);
         Task Delete(int ownerId);
         Task UpdateOwner(OwnerDTO2 owner);
+        Task<Owner> GetOwnerById(int ownerId);
     }
 }

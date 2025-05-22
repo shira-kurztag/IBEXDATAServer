@@ -72,7 +72,6 @@ namespace Common.DTO
         //```
         public string? PaidNote { get; set; }//   הערה על תשלום
         //
-
         //``
         public bool? IsSignedTofesHearot { get; set; } /// האם נחתם טופס הוראות בלתי חוזרות במעמד החתימה? 
                                                        
