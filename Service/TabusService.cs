@@ -16,14 +16,12 @@ namespace Service
         private readonly IOwnerDB _IOwnerDB;
         private readonly ITabusDB _ITabusDB;
         private readonly IMapper _mapper;
-        private readonly dbContext _dbContext;
         private readonly ILogger<TabusService> _logger;
 
-        public TabusService( IMapper mapper, IOwnerDB IOwnerDB, dbContext dbContext, ILogger<TabusService> logger, ITabusDB ITabusDB)
+        public TabusService( IMapper mapper, IOwnerDB IOwnerDB,  ILogger<TabusService> logger, ITabusDB ITabusDB)
         {
             _mapper = mapper;
             _IOwnerDB = IOwnerDB;
-            _dbContext = dbContext;
             _logger = logger;
             _ITabusDB = ITabusDB;
         }
@@ -40,6 +38,24 @@ namespace Service
 
 
 
+        }
+
+        public async Task UpdateTabusByOwnerId(TabuDTO tabu)
+        {
+            if (tabu == null)
+            {
+                throw new ArgumentNullException(nameof(tabu), "Tabu cannot be null.");
+            }
+            if( tabu.TabuId==0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(tabu.TabuId), "tabuId must be a positive integer.");
+            }
+            if (tabu.OwnerId == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(tabu.OwnerId), "OwnerId must be a positive integer.");
+            }
+            await _ITabusDB.UpdateTabusByOwnerId(tabu);
+            
         }
     }
 }
