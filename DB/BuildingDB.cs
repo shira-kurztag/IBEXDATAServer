@@ -23,33 +23,34 @@ namespace DB
             _logger.Information($"Fetching building numbers for project ID: {projectId}");
             return await _context.Buildings.Where(x => x.ProjectId == projectId).ToListAsync();
         }
-        public BuildingDTO AddBuilding(BuildingDTO newBuilding)
+        public async Task<Building> GetBuildingNumbers(int buildingId)
         {
-            if (newBuilding == null)
+            _logger.Information($"Fetching building numbers for project ID: {buildingId}");
+            return _context.Buildings.Where(x => x.BuildingId == buildingId).FirstOrDefault();
+        }
+        public async Task<Building> AddBuilding(Building newBuilding)
+        {
+            try
             {
-                throw new ArgumentNullException(nameof(newBuilding), "Building data cannot be null.");
+                await _context.Buildings.AddAsync(newBuilding);
+                await _context.SaveChangesAsync();
+
+                if (newBuilding != null)
+                {
+                    _logger.Information("Successfully added a new project.");
+                    return newBuilding;
+                }
+                else
+                {
+                    _logger.Warning("project was not added.");
+                    return null;
+                }
             }
-
-            // יצירת אובייקט ישות (Entity) מתוך ה-DTO
-            var building = new Building
+            catch (Exception ex)
             {
-                BuildingId = newBuilding.BuildingId,
-                ProjectId = newBuilding.ProjectId,
-                BuildingStatus = newBuilding.BuildingStatus,
-                BuildingNumber = newBuilding.BuildingNumber
-            };
-
-            // הוספת הישות למסד הנתונים
-            _context.Buildings.Add(building);
-            _context.SaveChanges();
-
-            // החזרת הישות בתור DTO
-            return new BuildingDTO(
-                building.BuildingId,
-                building.ProjectId,
-                building.BuildingStatus,
-                building.BuildingNumber
-            );
+                _logger.Error(ex, "Error in Add method of Add in ProjectDB.");
+                return null;
+            }
         }
         public async Task<List<Building>> GetAllBuilding()
         {
@@ -73,6 +74,29 @@ namespace DB
         {
             return await _context.Buildings.ToListAsync();
         }
-    }
+        public async Task<Building> Update(int id, Building building)
+        {
+            try
+            {
+                //var existingProject = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
+                //if (existingProject == null)
+                //{
+                //    _logger.Warning("Project with ID {ProjectId} not found.", id);
+                //    return null;
+                //}
 
+                building.BuildingId = id;
+                _context.Buildings.Update(building);
+                await _context.SaveChangesAsync();
+
+                _logger.Information("Successfully updated Project with ID {BuildingId}.", id);
+                return building;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error in Update method of BuildingDB.");
+                return null;
+            }
+        }
+    }
 }

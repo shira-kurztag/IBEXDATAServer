@@ -9,6 +9,6 @@ namespace DB
         IEnumerable<LinkageCode> GetLinkagCode();
         IEnumerable<Parking> GetParkingByBuilding(int buildingId);
         IEnumerable<Warehouse> GetWarehouseByBuilding(int buildingId);
-        ApartmentDTO AddApartmentWithLinkages(int buildingId, ApartmentDTO newLinkagesApartment);
+        ApartmentDTO AddApartmentWithLinkages( ApartmentDTO newLinkagesApartment);
     }
 }

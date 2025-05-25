@@ -1,14 +1,15 @@
-﻿using Common.DTO;
-using IBEXDATA.Models;
+﻿using IBEXDATA.Models;
 
 namespace DB
 {
     public interface IBuildingDB
     {
-        BuildingDTO AddBuilding(BuildingDTO newBuilding);
+        Task<Building> AddBuilding(Building newBuilding);
         Task<List<Building>> DeleteBuildingByIdAsync(int id);
-        Task<IEnumerable<Building>> GetBuildingNumbersByProjectId(int projectId);
         Task<List<Building>> GetAllBuilding();
         Task<List<Building>> GetAllBuildingByProject();
+        Task<Building> GetBuildingNumbers(int buildingId);
+        Task<IEnumerable<Building>> GetBuildingNumbersByProjectId(int projectId);
+        Task<Building> Update(int id, Building building);
     }
 }

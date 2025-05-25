@@ -36,9 +36,9 @@ namespace Service
         {
             return _ApartmentDB.GetLinkagCode();
         }
-        public ApartmentDTO AddApartmentWithLinkages(int buildingId, ApartmentDTO newLinkagesApartment)
+        public ApartmentDTO AddApartmentWithLinkages( ApartmentDTO newLinkagesApartment)
         {
-            return _ApartmentDB.AddApartmentWithLinkages(buildingId, newLinkagesApartment);
+            return _ApartmentDB.AddApartmentWithLinkages( newLinkagesApartment);
         }
     }
 }

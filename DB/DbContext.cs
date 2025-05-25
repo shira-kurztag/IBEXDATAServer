@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace IBEXDATA.Models;
@@ -10,7 +11,7 @@ public partial class dbContext : DbContext
     {
     }
 
-    public dbContext(DbContextOptions<DbContext> options)
+    public dbContext(DbContextOptions<dbContext> options)
         : base(options)
     {
     }
@@ -46,6 +47,8 @@ public partial class dbContext : DbContext
     public virtual DbSet<Fare> Fares { get; set; }
 
     public virtual DbSet<FixMortgage> FixMortgages { get; set; }
+
+    public virtual DbSet<LandOwnerShip> LandOwnerShips { get; set; }
 
     public virtual DbSet<LinkageCode> LinkageCodes { get; set; }
 
@@ -112,6 +115,9 @@ public partial class dbContext : DbContext
     public virtual DbSet<Warehouse> Warehouses { get; set; }
 
     public virtual DbSet<ZipFile> ZipFiles { get; set; }
+    public virtual DbSet<Magardoc> Magardocs { get; set; }
+
+    public virtual DbSet<TipeFile> TipeFiles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -393,6 +399,15 @@ public partial class dbContext : DbContext
             entity.Property(e => e.ManagerConfirm).HasColumnName("managerConfirm");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.WhichFilesToFix).HasColumnName("whichFilesToFix");
+        });
+
+        modelBuilder.Entity<LandOwnerShip>(entity =>
+        {
+            entity.ToTable("LandOwnerShips", "dbo");
+
+            entity.Property(e => e.Description)
+                .HasMaxLength(100)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<LinkageCode>(entity =>
@@ -1194,6 +1209,29 @@ public partial class dbContext : DbContext
             entity.Property(e => e.TypeMessageName)
                 .UseCollation("Latin1_General_CI_AS")
                 .HasColumnName("typeMessageName");
+        });
+
+        modelBuilder.Entity<Magardoc>(entity =>
+        {
+            entity.ToTable("Magardocs", "dbo");
+
+            entity.Property(e => e.FileNameShow).IsUnicode(false);
+            entity.Property(e => e.LogId).IsUnicode(false);
+            entity.Property(e => e.UniqId).IsUnicode(false);
+
+            entity.HasOne(d => d.Doc).WithMany(p => p.Magardocs)
+                .HasForeignKey(d => d.DocId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Magardocs_TipeFiles");
+        });
+
+        modelBuilder.Entity<TipeFile>(entity =>
+        {
+            entity.HasKey(e => e.Code);
+
+            entity.ToTable("TipeFiles", "dbo");
+
+            entity.Property(e => e.Description).IsUnicode(false);
         });
 
         modelBuilder.Entity<UpgradingLevelMortgage>(entity =>

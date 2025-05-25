@@ -43,7 +43,7 @@ namespace DB
             return _context.LinkageCodes.ToList();
         }
 
-        public ApartmentDTO AddApartmentWithLinkages(int buildingId, ApartmentDTO newLinkagesApartment)
+        public ApartmentDTO AddApartmentWithLinkages( ApartmentDTO newLinkagesApartment)
         {
             try
             {

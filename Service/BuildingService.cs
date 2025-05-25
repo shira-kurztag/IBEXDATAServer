@@ -18,17 +18,14 @@ namespace Service
         {
             return await _buildingDB.GetBuildingNumbersByProjectId(projectId);
         }
-        public BuildingDTO AddBuilding(BuildingDTO newBuilding)
+        public async Task<Building> GetBuildingNumbers(int buildingId)
         {
-            if (newBuilding == null)
-            {
-                throw new ArgumentException("Building data cannot be null.", nameof(newBuilding));
-            }
-
-            // קריאה לפונקציה ב-Repository
-            return _buildingDB.AddBuilding(newBuilding);
+            return await _buildingDB.GetBuildingNumbers(buildingId);
         }
-
+        public async Task<Building> Add(Building newBuilding)
+        {
+            return await _buildingDB.AddBuilding(newBuilding);
+        }
 
         public async Task<List<Building>> GetAllBuilding()
         {
@@ -43,7 +40,10 @@ namespace Service
             var Buildings = await _buildingDB.GetAllBuildingByProject();
             return Buildings.Find(x => x.BuildingId == Id);
         }
-
+        public async Task<Building> Update(int id, Building building)
+        {
+            return await _buildingDB.Update(id, building);
+        }
 
     }
 }

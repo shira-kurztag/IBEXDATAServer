@@ -45,8 +45,8 @@ namespace Application.Controllers
         {
             return _ApartmentService.GetLinkagCode();
         }
-        [HttpPost("{buildingId}/add-apartment")]
-        public ActionResult<ApartmentDTO> AddApartmentWithLinkages(int buildingId, [FromBody] ApartmentDTO newLinkagesApartment)
+        [HttpPost("add-apartment")]
+        public ActionResult<ApartmentDTO> AddApartmentWithLinkages( [FromBody] ApartmentDTO newLinkagesApartment)
         {
             if (newLinkagesApartment == null)
             {
@@ -54,7 +54,7 @@ namespace Application.Controllers
             }
 
 
-            var addedApartments = _ApartmentService.AddApartmentWithLinkages(buildingId, newLinkagesApartment);
+            var addedApartments = _ApartmentService.AddApartmentWithLinkages( newLinkagesApartment);
             return Ok(addedApartments);
         }
     }

@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using Service;
 
+using System.Web;
+
 namespace Application.Controllers
 
 {
@@ -44,6 +46,40 @@ namespace Application.Controllers
         }
 
 
+        [HttpGet("build/{buildingId}")]
+
+        public async Task<IActionResult> GetBuildingNumbers(int buildingId)
+
+        {
+
+            // פענוח המחרוזת המקודדת
+
+            var decodedBuildingNumber = Uri.UnescapeDataString(buildingId.ToString());
+
+            // לוגים לצורך בדיקות
+
+            _logger.LogInformation($"Encoded building number received: {buildingId}");
+
+            _logger.LogInformation($"Decoded building number: {decodedBuildingNumber}");
+
+            // קריאה לשירות עם המחרוזת המפוענחת
+
+            var buildingNumbers = await _BuildingService.GetBuildingNumbers(buildingId);
+
+            if (buildingNumbers == null)
+
+            {
+
+                return NotFound("No buildings match the given number.");
+
+            }
+
+            // החזרת התוצאה
+
+            return Ok(buildingNumbers);
+
+        }
+
         [HttpGet("project/{projectId}")]
 
         public async Task<IActionResult> GetBuildingNumbersByProjectId(int projectId)
@@ -71,45 +107,42 @@ namespace Application.Controllers
 
         }
 
+
         [HttpPost]
 
         [Route("AddBuilding")]
 
-        public ActionResult<BuildingDTO> AddBuilding([FromBody] BuildingDTO newBuilding)
+        public async Task<IActionResult> Add([FromBody] BuildingDTO newBuilding)
 
         {
 
-            try
+            if (!ModelState.IsValid)
 
             {
 
-                if (newBuilding == null)
-
-                {
-
-                    return BadRequest("Building data cannot be null.");
-
-                }
-
-                var addedBuilding = _BuildingService.AddBuilding(newBuilding);
-
-                return Ok(addedBuilding);
+                return BadRequest(ModelState);
 
             }
 
-            catch (Exception ex)
+            var newBuilding1 = _mapper.Map<BuildingDTO, Building>(newBuilding);
+
+            var projto = await _BuildingService.Add(newBuilding1);
+
+            if (projto != null)
 
             {
 
-                // הדפסת השגיאה ללוג
+                _logger.LogInformation("Successfully added Project: {ProjectName}", newBuilding.BuildingId);
 
-                Console.WriteLine($"Error occurred in Controller: {ex.Message}");
+                BuildingDTO newProj = _mapper.Map<Building, BuildingDTO>(projto);
 
-                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-
-                return StatusCode(500, "An error occurred while adding the building.");
+                return CreatedAtAction(nameof(GetBuildingNumbers), new { BuildingId = newProj.BuildingId }, newProj);
 
             }
+
+            _logger.LogWarning("Failed to add the Project: {ProjectName}", newBuilding.BuildingId);
+
+            return BadRequest($"The Project {newBuilding.BuildingId} not successfully added");
 
         }
 
@@ -173,6 +206,43 @@ namespace Application.Controllers
 
         }
 
+        [HttpPut("{id}")]
+
+        public async Task<IActionResult> Update(int id, [FromBody] BuildingDTO build)
+
+        {
+
+            if (!ModelState.IsValid)
+
+            {
+
+                return BadRequest(ModelState);
+
+            }
+
+            var bui = _mapper.Map<BuildingDTO, Building>(build);
+
+            var updatedBuilding = await _BuildingService.Update(id, bui);
+
+            if (updatedBuilding != null)
+
+            {
+
+                _logger.LogInformation("Successfully updated Bank with ID: {BankId}", id);
+
+                var updatedBuildDTO = _mapper.Map<Building, BuildingDTO>(updatedBuilding);
+
+                return Ok(updatedBuildDTO);
+
+            }
+
+            _logger.LogWarning("Failed to update Bank with ID: {BankId}", id);
+
+            return NotFound($"Bank with ID {id} not found");
+
+        }
+
     }
 
 }
+

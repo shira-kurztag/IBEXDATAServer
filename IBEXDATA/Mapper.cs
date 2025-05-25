@@ -24,6 +24,8 @@ namespace Application
             CreateMap<ContractorDTO2, Contractor>().ReverseMap();
 
             CreateMap<Building, BuildingDTO>();
+            CreateMap<BuildingDTO, Building > ();
+
             CreateMap<Mortagege, MortagegeDTO>().ReverseMap();
 
             CreateMap<Apartment, ApartmentDTO>();
