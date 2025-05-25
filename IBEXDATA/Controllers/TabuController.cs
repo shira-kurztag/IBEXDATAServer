@@ -20,13 +20,13 @@ namespace Application.Controllers
         }
 
         // GET: api/<TabusController>
-        [HttpGet("{OwnerId}")]
-        public async Task<IActionResult> GetTabusByOwnerId(int OwnerId)
+        [HttpGet("{ApartmentId}")]
+        public async Task<IActionResult> GetTabusByOwnerId(int ApartmentId)
         {
             try
             {
                 // Fetch the list of tenants from the service
-                var tabu = await _tabusService.GetTabusByOwnerId(OwnerId);
+                var tabu = await _tabusService.GetTabusByOwnerId(ApartmentId);
 
                 // Return the list in the response
                 return Ok(tabu);
@@ -58,9 +58,13 @@ namespace Application.Controllers
         //{
         //}
 
+
         // PUT api/<TabusController>/5
-        [HttpPut("{OwnerId}")]
-        public  async Task<IActionResult> Put(int OwnerId, [FromBody] TabuDTO tabu)
+
+
+        //// PUT api/<TabusController>/5
+        [HttpPut()]
+        public async Task<IActionResult> Put( [FromBody] TabuDTO tabu)
         {
             if (tabu == null )
             {
@@ -69,7 +73,8 @@ namespace Application.Controllers
 
             try
             {
-                await _tabusService.UpdateTabu(tabu);
+
+                await _tabusService.UpdateTabusByOwnerId(tabu);
                 return Ok(new { message = "Tabu Update successfully." });
             }
             catch (InvalidOperationException ex)
