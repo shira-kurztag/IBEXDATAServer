@@ -22,7 +22,7 @@ namespace Common.DTO
 
         public double? CommonArea { get; set; }
 
-        //public string? NotarizedPoweReason { get; set; }
+        public string? NotarizedPoweReason { get; set; }
 
         public bool? IsPurchaseTax { get; set; }
 
