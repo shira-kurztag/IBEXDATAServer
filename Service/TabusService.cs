@@ -18,10 +18,11 @@ namespace Service
         private readonly IOwnerDB _IOwnerDB;
         private readonly ITabusDB _ITabusDB;
         private readonly IMapper _mapper;
+        private readonly BuildingDB _IBuildingDB;
         private readonly ProjectDB _IProjectDB;
         private readonly ILogger<TabusService> _logger;
 
-        public TabusService( IMapper mapper, IOwnerDB IOwnerDB,  ILogger<TabusService> logger, ITabusDB ITabusDB, IApartmentDB IApartmentDB, IFareDB IFareDB,)
+        public TabusService(BuildingDB IBuildingDB,IMapper mapper, IOwnerDB IOwnerDB,  ILogger<TabusService> logger, ITabusDB ITabusDB, IApartmentDB IApartmentDB, IFareDB IFareDB, ProjectDB IProjectDB)
         {
             _mapper = mapper;
             _IFareDB = IFareDB;
@@ -29,6 +30,8 @@ namespace Service
             _logger = logger;
             _ITabusDB = ITabusDB;
             _IApartmentDB = IApartmentDB;
+            _IProjectDB = IProjectDB;
+            _IBuildingDB = IBuildingDB;
         }
 
         public async Task<TabuDTO> GetTabusByApartmentId(int ApartmentId)
@@ -39,18 +42,20 @@ namespace Service
                 throw new InvalidOperationException($"No apartment found for the given ApartmentId: {ApartmentId}.");
             }
             var fareList = await _IFareDB.filterFare("אגרת משכנתא");
-            var fare1 = fareList.FirstOrDefault(); 
+            var fare = fareList.FirstOrDefault(); 
 
             var tabus = await _ITabusDB.GetTabusByApartmentId(ApartmentId);
             var tabuDTO = _mapper.Map<TabuDTO>(tabus);
-            if (fare1 != null)
-            {
-                tabuDTO.Bloc = fare1.Bloc ?? 0;
-                tabuDTO.Smooth = fare1.Smooth ?? 0;
 
-            }
-            var p = await _IApartmentDB.(ApartmentId);
+                tabuDTO.FareName = fare.FareName ?? "";
+                tabuDTO.FareAmount = fare.FareAmount ?? 0;
 
+           
+            var project = await _IProjectDB.GetBlocAndSmoothByProjectId(ApartmentId);
+            tabuDTO.Bloc = project.Bloc ?? 0;
+            tabuDTO.Smooth = project.Smooth ?? 0;
+            var building = await _IBuildingDB.GetBuildingByApartmentId(ApartmentId);
+            tabuDTO.SmothArea = building.SmothArea ?? 0;
 
             return tabuDTO;
 
