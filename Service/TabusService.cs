@@ -18,9 +18,10 @@ namespace Service
         private readonly IOwnerDB _IOwnerDB;
         private readonly ITabusDB _ITabusDB;
         private readonly IMapper _mapper;
+        private readonly ProjectDB _IProjectDB;
         private readonly ILogger<TabusService> _logger;
 
-        public TabusService( IMapper mapper, IOwnerDB IOwnerDB,  ILogger<TabusService> logger, ITabusDB ITabusDB, IApartmentDB IApartmentDB, IFareDB IFareDB)
+        public TabusService( IMapper mapper, IOwnerDB IOwnerDB,  ILogger<TabusService> logger, ITabusDB ITabusDB, IApartmentDB IApartmentDB, IFareDB IFareDB,)
         {
             _mapper = mapper;
             _IFareDB = IFareDB;
@@ -30,18 +31,28 @@ namespace Service
             _IApartmentDB = IApartmentDB;
         }
 
-        public async Task<TabuDTO> GetTabusByOwnerId(int ApartmentId)
+        public async Task<TabuDTO> GetTabusByApartmentId(int ApartmentId)
         {
             var Apartment = await _IApartmentDB.GetTenantsApartment(ApartmentId);
             if (Apartment == null)
             {
                 throw new InvalidOperationException($"No apartment found for the given ApartmentId: {ApartmentId}.");
             }
-            var fare = await _IFareDB.filterFare("אגרת משכנתא");
+            var fareList = await _IFareDB.filterFare("אגרת משכנתא");
+            var fare1 = fareList.FirstOrDefault(); 
 
-            var tabus = await _ITabusDB.GetTabusByOwnerId(ApartmentId);
+            var tabus = await _ITabusDB.GetTabusByApartmentId(ApartmentId);
+            var tabuDTO = _mapper.Map<TabuDTO>(tabus);
+            if (fare1 != null)
+            {
+                tabuDTO.Bloc = fare1.Bloc ?? 0;
+                tabuDTO.Smooth = fare1.Smooth ?? 0;
 
-            return _mapper.Map<TabuDTO>(tabus);
+            }
+            var p = await _IApartmentDB.(ApartmentId);
+
+
+            return tabuDTO;
 
         }
 

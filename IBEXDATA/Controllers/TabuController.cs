@@ -21,12 +21,12 @@ namespace Application.Controllers
 
         // GET: api/<TabusController>
         [HttpGet("{ApartmentId}")]
-        public async Task<IActionResult> GetTabusByOwnerId(int ApartmentId)
+        public async Task<IActionResult> GetTabusByApartmentId(int ApartmentId)
         {
             try
             {
                 // Fetch the list of tenants from the service
-                var tabu = await _tabusService.GetTabusByOwnerId(ApartmentId);
+                var tabu = await _tabusService.GetTabusByApartmentId(ApartmentId);
 
                 // Return the list in the response
                 return Ok(tabu);

@@ -10,7 +10,7 @@ namespace DB
 {
     public interface ITabusDB
     {
-        Task<Tabu> GetTabusByOwnerId(int ApartmentId);
+        Task<Tabu> GetTabusByApartmentId(int ApartmentId);
 
         Task UpdateTabusByOwnerId ( TabuDTO tabu);
     }

@@ -116,6 +116,17 @@ namespace DB
             return await _context.Contractors.ToListAsync();
         }
 
- 
+        public async Task<Project> GetBlocAndSmoothByProjectId(int apartmentId)
+        {
+            var project = await (from a in _context.Apartments
+                                 join b in _context.Buildings on a.BuildingId equals b.BuildingId
+                                 join proj in _context.Projects on b.ProjectId equals proj.ProjectId
+                                 where a.ApartmentId == apartmentId
+                                 select proj).FirstOrDefaultAsync();
+
+            return project;
+        }
+
+
     }
 }

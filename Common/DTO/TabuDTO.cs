@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Common.DTO
 {
@@ -46,62 +47,18 @@ namespace Common.DTO
 
         public bool? IsTaxApprovedTransferRightsValid { get; set; }
 
-        //public string? TofesLeaseBillFile { get; set; }
-
-        //public string? TofesBakashaLeRishuBeMmi { get; set; }
-
+      
         public bool? IsPartiesSigned { get; set; }
 
         public bool? IsSignedByMm { get; set; }
 
         public bool? IsMortgageBillReceived { get; set; }
+        public string? FareName { get; set; }
+        public int? FareAmount { get; set; }
+        public int? Bloc { get; set; }
+        public int? Smooth { get; set; }
+        public int? SmothArea { get; set; }
 
-        //public int? IsMortgageBillReceivedFromBankId { get; set; }
 
-        //public string? IsMortgageBillReceivedSum { get; set; }
-
-        //public bool? IsMortgageBillReceivedValid { get; set; }
-
-        //public bool? IsMortgageBillReceivedSuitable { get; set; }
-
-        //public string? Explanation { get; set; }
-
-        //public bool? IsSignedFile { get; set; }
-
-        //public string? SignedFile { get; set; }
-
-        //public bool? IsMortgageBillReceived2 { get; set; }
-
-        //public int? IsMortgageBillReceivedFromBankId2 { get; set; }
-
-        //public string? IsMortgageBillReceivedSum2 { get; set; }
-
-        //public bool? IsMortgageBillReceivedValid2 { get; set; }
-
-        //public bool? IsMortgageBillReceivedSuitable2 { get; set; }
-
-        //public string? Explanation2 { get; set; }
-
-        //public bool? IsSignedFile2 { get; set; }
-
-        //public string? SignedFile2 { get; set; }
-
-        //public bool? IsRegisteredInTabu { get; set; }
-
-        //public int? RegisteredInTabuNumShtar { get; set; }
-
-        //public DateOnly? RegisteredInTabuDateRegister { get; set; }
-
-        //public string? RegisteredInTabuComments { get; set; }
-
-        //public string? RegisteredInTabuFile { get; set; }
-
-        //public string? Note { get; set; }
-
-        //public DateTime? DachuyLeyomDate { get; set; }
-
-        //public int? Status { get; set; }
-
-        //public double? HowMuchWasPaid { get; set; }
     }
 }

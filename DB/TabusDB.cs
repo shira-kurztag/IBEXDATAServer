@@ -24,7 +24,7 @@ namespace DB
             _context = context;
         }
 
-        public async Task<Tabu> GetTabusByOwnerId(int ApartmentId)
+        public async Task<Tabu> GetTabusByApartmentId(int ApartmentId)
         {
             var tabu = await _context.Tabus
                 .Where(t => t.ApartmentId == ApartmentId)
