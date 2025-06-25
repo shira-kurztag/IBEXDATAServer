@@ -54,7 +54,7 @@ namespace Common.DTO
 
         public bool? IsMortgageBillReceived { get; set; }
         public string? FareName { get; set; }
-        public int? FareAmount { get; set; }
+        public double? FareAmount { get; set; }
         public int? Bloc { get; set; }
         public int? Smooth { get; set; }
         public int? SmothArea { get; set; }

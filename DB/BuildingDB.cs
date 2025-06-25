@@ -46,9 +46,19 @@ namespace DB
             return building.AddressAndNumberOfMunicipal;
         }
 
+        public  async Task<Building> GetBuildingByApartmentId(int ApartmentId)
+        {
 
-        
+            var building = await (from a in _context.Apartments
+                                  join b in _context.Buildings on a.BuildingId equals b.BuildingId
+                                  where a.ApartmentId == ApartmentId
+                                  select b).FirstOrDefaultAsync();
 
+            if (building == null)
+            {
+                throw new InvalidOperationException($"No building found for the given ApartmentId: {ApartmentId}.");
+            }
+            return building;
 
-    }
+        }
 }
